@@ -1,5 +1,5 @@
 <template>
-    <tr class="highlight-row">
+    <tr :class="{ 'highlight-row': true, '__data-row-selected': row.selected }">
         <component
             v-for="(item, index) in row.cells"
             :key="`rw-${index}`"
@@ -128,6 +128,13 @@ export default {
             color: black;
             background-color: rgba(255,127,39, .4)
         }
+    }
+}
+
+.__data-row-selected {
+    td, th {
+        color: black !important;
+        background-color: rgb(58, 216, 255) !important;
     }
 }
 

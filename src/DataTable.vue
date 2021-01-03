@@ -192,12 +192,31 @@ export default {
             required: false,
             default () {
                 return [
+                    10,
                     15,
                     30,
                     60,
                     100
                 ]
             }
+        },
+        /**
+         * Holds array of selected rows
+         */
+        selectedRows: {
+            type: Array,
+            required: false,
+            default () {
+                return []
+            }
+        },
+        /**
+         * Holds key for selection
+         */
+        selectedBy: {
+            type: String,
+            required: false,
+            default: 'id'
         }
     },
     data () {
@@ -300,12 +319,28 @@ export default {
                             return data
                         }
                         return { index: item.data, content: '', customComponent: false }
-                    })
+                    }),
+                    selected: this.isSelected(row)
                 }
             })
+        },
+        selectedArray () {
+            const tmp = []
+            for (const item of this.selectedRows) {
+                if (item[this.selectedBy] !== undefined) {
+                    tmp.push(item[this.selectedBy])
+                }
+            }
+            return tmp
         }
     },
     methods: {
+        isSelected (row) {
+            if (this.selectedArray.length === 0) {
+                return false
+            }
+            return this.selectedArray.indexOf(row[this.selectedBy]) > -1
+        },
         getPortionOfArray (sourceArray, offset, limit) {
             const content = []
             for (let i = offset; i < sourceArray.length; i++) {
