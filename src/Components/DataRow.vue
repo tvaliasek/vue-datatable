@@ -11,52 +11,25 @@
         >
             {{ item.content }}
         </component>
-        <td v-if="actions" class="text-right whitespace-nowrap __datatable-actions">
-            <div v-if="confirm === null">
-                <b-btn
-                    v-for="button in buttons"
-                    :key="`button-${button.event}`"
-                    size="sm"
-                    class="ml-1"
-                    :variant="button.variant"
-                    @click.prevent="onButtonClick(button)"
-                    :disabled="disableButtons"
-                >
-                    {{ button.text }}
-                </b-btn>
-            </div>
-            <div class="whitespace-nowrap text-center" v-else>
-                <p class="mb-0">{{confirm.confirmText}}</p>
-                <p class="whitespace-nowrap mb-0">
-                    <b-btn
-                        size="sm"
-                        variant="primary"
-                        @click.prevent="onConfirm"
-                        class="ml-1"
-                    >
-                        {{i18n.buttonConfirmOk}}
-                    </b-btn>
-                    <b-btn
-                        size="sm"
-                        variant="danger"
-                        class="ml-1"
-                        @click.prevent="onCancel"
-                    >
-                        {{i18n.buttonConfirmCancel}}
-                    </b-btn>
-                </p>
-            </div>
-        </td>
+        <data-row-buttons
+            v-if="actions"
+            :row="row"
+            :buttons="buttons"
+            :i18n="i18n"
+            :disable-buttons="disableButtons"
+            :running-actions="runningActions"
+            @action="onAction"
+        />
     </tr>
 </template>
 
 <script>
+import DataRowButtons from './DataRowButtons.vue'
+
 export default {
     name: 'DataRow',
-    data () {
-        return {
-            confirm: null
-        }
+    components: {
+        DataRowButtons
     },
     props: {
         header: {
@@ -91,29 +64,14 @@ export default {
         filter: {
             type: Object,
             required: false
+        },
+        runningActions: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     methods: {
-        onConfirm () {
-            this.emitButtonAction(this.confirm)
-            this.onCancel()
-        },
-        onCancel () {
-            this.confirm = null
-        },
-        onButtonClick (button) {
-            if (button.confirm) {
-                this.confirm = button
-            } else {
-                this.emitButtonAction(button)
-            }
-        },
-        emitButtonAction (button) {
-            this.$emit('action', {
-                event: button.event,
-                row: this.row.row
-            })
-        },
         onAction (data) {
             this.$emit('action', data)
         }

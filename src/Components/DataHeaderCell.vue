@@ -6,7 +6,7 @@
         <b-form-input
             size="sm"
             v-if="filterable"
-            v-model.trim="filterValue"
+            v-model="localFilterValue"
             :placeholder="i18n.search"
         />
     </th>
@@ -51,6 +51,12 @@ export default {
             default: false
         }
     },
+    data () {
+        return {
+            tm: null,
+            localFilterValue: ''
+        }
+    },
     computed: {
         sortIconName () {
             if (this.sort === this.dataField) {
@@ -71,6 +77,18 @@ export default {
                 this.$emit('filter', filter)
             }
         }
+    },
+    watch: {
+        localFilterValue (newValue) {
+            const value = `${newValue}`
+            window.clearTimeout(this.tm)
+            window.setTimeout(() => {
+                this.filterValue = value
+            }, 500)
+        }
+    },
+    beforeDestroy () {
+        window.clearTimeout(this.tm)
     },
     methods: {
         onSort () {

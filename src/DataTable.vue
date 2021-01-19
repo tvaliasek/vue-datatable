@@ -47,6 +47,7 @@
                     @action="onAction"
                     :i18n="i18nStrings"
                     :disable-buttons="disableButtons"
+                    :running-actions="runningActions"
                 />
             </tbody>
         </table>
@@ -217,6 +218,14 @@ export default {
             type: String,
             required: false,
             default: 'id'
+        },
+        /**
+         * Holds list of in-progress async actions
+         */
+        runningActions: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     data () {
@@ -250,6 +259,13 @@ export default {
             }
             return tmp
         },
+        formatFunctions () {
+            const tmp = {}
+            for (const cell of this.header) {
+                tmp[cell.data] = cell.format
+            }
+            return tmp
+        },
         flattenedData () {
             return this.data.map((item) => {
                 return flat.flatten(item, { safe: true })
@@ -274,8 +290,13 @@ export default {
                     if (this.filter.hasOwnProperty(index) && this.filter[index] !== '' && this.filter[index]) {
                         if (this.filterFunctions.hasOwnProperty(index) && typeof this.filterFunctions[index] === 'function') {
                             isVisible = isVisible && this.filterFunctions[index](`${row[index]}`, this.filter[index], row)
+                        } else if (this.formatFunctions[index] && typeof this.formatFunctions[index] === 'function') {
+                            isVisible = isVisible && (`${this.formatFunctions[index](row[index])}`.indexOf(this.filter[index]) > -1)
                         } else {
                             isVisible = isVisible && (`${row[index]}`.indexOf(this.filter[index]) > -1)
+                        }
+                        if (!isVisible) {
+                            return false
                         }
                     }
                 }
