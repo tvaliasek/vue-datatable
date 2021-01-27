@@ -293,7 +293,7 @@ export default {
                         } else if (this.formatFunctions[index] && typeof this.formatFunctions[index] === 'function') {
                             isVisible = isVisible && (`${this.formatFunctions[index](row[index])}`.indexOf(this.filter[index]) > -1)
                         } else {
-                            isVisible = isVisible && (`${row[index]}`.toLocaleLowerCase().indexOf(this.filter[index]) > -1)
+                            isVisible = isVisible && (`${row[index]}`.toLocaleLowerCase().indexOf(`${this.filter[index]}`.toLocaleLowerCase()) > -1)
                         }
                         if (!isVisible) {
                             return false
