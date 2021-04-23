@@ -13,44 +13,46 @@
                 />
             </div>
         </div>
-        <table class="table table-sm table-bordered table-striped mb-0">
-            <data-header
-                :actions="actions"
-                :header="header"
-                :filter="filter"
-                :sort="sortBy"
-                :sort-direction="sortDirection"
-                @filter="onFilter"
-                @sort="onSort"
-                :i18n="i18nStrings"
-            />
-            <tbody v-if="data.length === 0">
-                <tr>
-                    <td class="text-center" :colspan="header.length + ((actions) ? 1 : 0)">
-                        <p class="mb-0" v-if="!loading">{{ i18nStrings.noData }}</p>
-                        <loading-indicator
-                            v-else
-                            :i18n="i18nStrings"
-                        />
-                    </td>
-                </tr>
-            </tbody>
-            <tbody v-else>
-                <data-row
-                    v-for="(row, index) in processedData"
-                    :key="`row-${index}`"
-                    :row="row"
+        <div :class="responsiveClass">
+            <table class="table table-sm table-bordered table-striped mb-0">
+                <data-header
+                    :actions="actions"
                     :header="header"
                     :filter="filter"
-                    :actions="actions"
-                    :buttons="buttons"
-                    @action="onAction"
+                    :sort="sortBy"
+                    :sort-direction="sortDirection"
+                    @filter="onFilter"
+                    @sort="onSort"
                     :i18n="i18nStrings"
-                    :disable-buttons="disableButtons"
-                    :running-actions="runningActions"
                 />
-            </tbody>
-        </table>
+                <tbody v-if="data.length === 0">
+                    <tr>
+                        <td class="text-center" :colspan="header.length + ((actions) ? 1 : 0)">
+                            <p class="mb-0" v-if="!loading">{{ i18nStrings.noData }}</p>
+                            <loading-indicator
+                                v-else
+                                :i18n="i18nStrings"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <data-row
+                        v-for="(row, index) in processedData"
+                        :key="`row-${index}`"
+                        :row="row"
+                        :header="header"
+                        :filter="filter"
+                        :actions="actions"
+                        :buttons="buttons"
+                        @action="onAction"
+                        :i18n="i18nStrings"
+                        :disable-buttons="disableButtons"
+                        :running-actions="runningActions"
+                    />
+                </tbody>
+            </table>
+        </div>
         <div class="d-flex justify-content-between flex-wrap my-1">
             <div class="mb-1">
                 <b-pagination
@@ -226,6 +228,10 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        responsive: {
+            required: false,
+            default: false
         }
     },
     data () {
@@ -238,6 +244,12 @@ export default {
         }
     },
     computed: {
+        responsiveClass () {
+            if (this.responsive) {
+                return (this.responsive === true) ? 'table-responsive' : `table-responsive-${this.responsive}`
+            }
+            return null
+        },
         i18nStrings () {
             const defaults = (this.lang !== undefined && langs[this.lang]) ? langs[this.lang] : langs.en_US
             return {

@@ -37,6 +37,7 @@ Define columns (header prop) and provide dataset as array of objects.
 | disableButtons | Boolean | no | false | Toggle disabled state of all actions/buttons |
 | paging | Boolean | no | false | Toggle pagination |
 | pagingOptions | Array | no | [ 15, 30, 60, 100 ] | Rows per page variants |
+| responsive | Boolean or string | no | null | responsive css class suffix |
 
 ### DataTable column definition
 
