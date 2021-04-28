@@ -1,5 +1,15 @@
 <template>
     <tr :class="{ 'highlight-row': true, '__data-row-selected': row.selected }">
+        <data-row-buttons
+            v-if="actions && actionsOnLeft"
+            :actions-on-left="actionsOnLeft"
+            :row="row"
+            :buttons="buttons"
+            :i18n="i18n"
+            :disable-buttons="disableButtons"
+            :running-actions="runningActions"
+            @action="onAction"
+        />
         <component
             v-for="(item, index) in row.cells"
             :key="`rw-${index}`"
@@ -12,7 +22,8 @@
             {{ item.content }}
         </component>
         <data-row-buttons
-            v-if="actions"
+            v-if="actions && !actionsOnLeft"
+            :actions-on-left="actionsOnLeft"
             :row="row"
             :buttons="buttons"
             :i18n="i18n"
@@ -32,6 +43,11 @@ export default {
         DataRowButtons
     },
     props: {
+        actionsOnLeft: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         header: {
             type: Array,
             required: true

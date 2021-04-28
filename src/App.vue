@@ -30,6 +30,7 @@
             lang="en_US"
             :paging="true"
             @detail="onDetail"
+            :actions-on-left="false"
         />
     </div>
 </template>

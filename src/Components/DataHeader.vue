@@ -1,6 +1,7 @@
 <template>
     <thead class="__datatable-header">
         <tr>
+            <th v-if="actions && actionsOnLeft"></th>
             <data-header-cell
                 v-for="(cell, index) in header"
                 :key="`header-${index}`"
@@ -15,7 +16,7 @@
                 @sort="onSort"
                 :i18n="i18n"
             />
-            <th v-if="actions"></th>
+            <th v-if="actions && !actionsOnLeft"></th>
         </tr>
     </thead>
 </template>
@@ -31,6 +32,11 @@ export default {
         header: {
             type: Array,
             required: true
+        },
+        actionsOnLeft: {
+            type: Boolean,
+            required: false,
+            default: false
         },
         actions: {
             type: Boolean,

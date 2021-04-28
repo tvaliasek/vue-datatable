@@ -1,5 +1,5 @@
 <template>
-    <td class="text-right whitespace-nowrap __datatable-actions">
+    <td :class="{ 'text-right': !actionsOnLeft, 'whitespace-nowrap __datatable-actions': true }">
         <div v-if="confirm === null">
             <b-btn
                 v-for="button in buttonsList"
@@ -41,6 +41,11 @@
 export default {
     name: 'DataRowButtons',
     props: {
+        actionsOnLeft: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         row: {
             type: Object,
             required: true

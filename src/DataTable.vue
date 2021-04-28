@@ -24,6 +24,7 @@
                     @filter="onFilter"
                     @sort="onSort"
                     :i18n="i18nStrings"
+                    :actions-on-left="actionsOnLeft"
                 />
                 <tbody v-if="data.length === 0">
                     <tr>
@@ -49,6 +50,7 @@
                         :i18n="i18nStrings"
                         :disable-buttons="disableButtons"
                         :running-actions="runningActions"
+                        :actions-on-left="actionsOnLeft"
                     />
                 </tbody>
             </table>
@@ -103,6 +105,11 @@ export default {
         AutoUpdateCounter
     },
     props: {
+        actionsOnLeft: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         /**
          * ISO language code of translation, as defined in src/Langs
          */
