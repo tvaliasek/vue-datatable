@@ -68,6 +68,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 | variant | String | yes | undefined | Bootstrap variant of button ex: `'primary'`, `'danger'` |
 | confirm | Boolean | no | false | Enable confirmation when button is clicked |
 | confirmText | String | no | undefined | Text to show on confirmation prompt |
+| customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row |
 
 ### Events
 

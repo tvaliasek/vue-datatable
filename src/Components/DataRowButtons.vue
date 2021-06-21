@@ -1,17 +1,19 @@
 <template>
     <td :class="{ 'text-right': !actionsOnLeft, 'whitespace-nowrap __datatable-actions': true }">
         <div v-if="confirm === null">
-            <b-btn
-                v-for="button in buttonsList"
-                :key="`button-${button.event}`"
-                size="sm"
-                class="ml-1"
-                :variant="button.variant"
-                @click.prevent="onButtonClick(button)"
+            <component
+                v-for="(button, index) in buttonsList"
+                :is="(button.customComponent !== undefined) ? button.customComponent() : 'b-btn'"
+                :row="(button.customComponent !== undefined) ? row : undefined"
+                :key="`button-${index}${button.event}`"
+                :size="(button.customComponent !== undefined) ? undefined : 'sm'"
+                :class="(button.customComponent !== undefined) ? undefined : 'ml-1'"
+                :variant="(button.customComponent !== undefined) ? undefined : button.variant"
+                @click.prevent="(button.customComponent !== undefined) ? undefined : onButtonClick(button)"
                 :disabled="disableButtons"
             >
                 {{ button.text }}
-            </b-btn>
+            </component>
         </div>
         <div class="whitespace-nowrap text-center" v-else>
             <p class="mb-0">{{confirm.confirmText}}</p>

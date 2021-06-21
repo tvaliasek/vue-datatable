@@ -37,6 +37,7 @@
 
 <script>
 import axios from 'axios'
+import CustomButton from './CustomButton.vue'
 const DATASET_URL = 'https://www.govtrack.us/api/v2/role?current=true&role_type=senator'
 
 export default {
@@ -99,6 +100,11 @@ export default {
                     event: 'detail',
                     variant: 'primary',
                     text: 'Detail'
+                },
+                {
+                    customComponent () {
+                        return CustomButton
+                    }
                 }
             ]
         }
