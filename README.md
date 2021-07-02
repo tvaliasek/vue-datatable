@@ -69,6 +69,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 | confirm | Boolean | no | false | Enable confirmation when button is clicked |
 | confirmText | String | no | undefined | Text to show on confirmation prompt |
 | customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row |
+| visibleIf | Function | no | undefined | Function which returns boolean to indicate if button should be visible, function will receive whole data row as first parameter |
 
 ### Events
 
