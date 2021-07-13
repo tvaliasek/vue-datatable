@@ -13,6 +13,7 @@
                 />
             </div>
         </div>
+        <slot name="beforeTable"></slot>
         <div :class="responsiveClass">
             <table class="table table-sm table-bordered table-striped mb-0">
                 <data-header
@@ -27,6 +28,7 @@
                     :actions-on-left="actionsOnLeft"
                 />
                 <tbody v-if="data.length === 0">
+                    <slot name="firstRow"></slot>
                     <tr>
                         <td class="text-center" :colspan="header.length + ((actions) ? 1 : 0)">
                             <p class="mb-0" v-if="!loading">{{ i18nStrings.noData }}</p>
@@ -36,8 +38,10 @@
                             />
                         </td>
                     </tr>
+                    <slot name="lastRow"></slot>
                 </tbody>
                 <tbody v-else>
+                    <slot name="firstRow"></slot>
                     <data-row
                         v-for="(row, index) in processedData"
                         :key="`row-${index}`"
@@ -52,11 +56,14 @@
                         :running-actions="runningActions"
                         :actions-on-left="actionsOnLeft"
                     />
+                    <slot name="lastRow"></slot>
                 </tbody>
             </table>
         </div>
+        <slot name="afterTable"></slot>
         <div class="d-flex justify-content-between flex-wrap my-1">
             <div class="mb-1">
+                <slot name="bottomLeft"></slot>
                 <b-pagination
                     v-if="paging"
                     size="sm"
@@ -68,6 +75,7 @@
                 />
             </div>
             <div class="mb-1 text-md-right">
+                <slot name="bottomRight"></slot>
                 <b-dropdown
                     v-if="paging"
                     variant="primary"
