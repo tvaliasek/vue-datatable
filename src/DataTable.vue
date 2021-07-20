@@ -56,6 +56,17 @@
                         :running-actions="runningActions"
                         :actions-on-left="actionsOnLeft"
                     />
+                    <tr v-if="Object.keys(aggregateFunctions).length > 0">
+                        <th v-for="(cell, index) of header" :key="`aggregator-${cell.data}-${index}`" >
+                            <span v-if="aggregateTexts[cell.data]">
+                                {{aggregateTexts[cell.data]}}<br/>
+                            </span>
+                            <span v-if="typeof aggregateFunctions[cell.data] === 'function'">
+                                {{filteredData.reduce(aggregateFunctions[cell.data], aggregateInitialValues[cell.data])}}
+                            </span>
+                        </th>
+                        <th v-if="actions"></th>
+                    </tr>
                     <slot name="lastRow"></slot>
                 </tbody>
             </table>
@@ -290,6 +301,27 @@ export default {
             const tmp = {}
             for (const cell of this.header) {
                 tmp[cell.data] = cell.format
+            }
+            return tmp
+        },
+        aggregateFunctions () {
+            const tmp = {}
+            for (const cell of this.header.filter(item => item.aggregate)) {
+                tmp[cell.data] = cell.aggregate
+            }
+            return tmp
+        },
+        aggregateTexts () {
+            const tmp = {}
+            for (const cell of this.header.filter(item => item.aggregateText)) {
+                tmp[cell.data] = cell.aggregateText
+            }
+            return tmp
+        },
+        aggregateInitialValues () {
+            const tmp = {}
+            for (const cell of this.header.filter(item => item.aggregateInitialValue !== undefined)) {
+                tmp[cell.data] = cell.aggregateInitialValue
             }
             return tmp
         },

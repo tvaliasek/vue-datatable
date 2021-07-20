@@ -56,6 +56,9 @@ Columns are defined as Array of objects
 | customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row |
 | cellStyle | String | no | undefined | CSS style rules to apply on column data cells |
 | cellClassnames | Array | no | [] | Array of css class names to apply on column data cells |
+| aggregate | Function | no | undefined | Array reducer function for aggregation of filtered and flattened data. Whole flattened row is obtained as reducer currentValue. [See Array.reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) |
+| aggregateInitialValue | Any | no | undefined | Value to use as aggregation (reducer) initial value. |
+| aggregateText | String | no | undefined | Text to place before aggregation result. |
 
 ### DataTable actions definition
 

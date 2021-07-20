@@ -90,7 +90,12 @@ export default {
                     filterable: true,
                     format (value) {
                         return (Array.isArray(value) ? value.join(', ') : `${value}`)
-                    }
+                    },
+                    aggregateText: 'Celkem: ',
+                    aggregate (accumulator, currentValue, index, array) {
+                        return accumulator + (Array.isArray(currentValue.congress_numbers) ? currentValue.congress_numbers.length : 0)
+                    },
+                    aggregateInitialValue: 0
                 }
             ]
         },
