@@ -26,11 +26,13 @@
                     @sort="onSort"
                     :i18n="i18nStrings"
                     :actions-on-left="actionsOnLeft"
+                    :selectable-rows="selectableRows"
+                    :selectable-rows-checkboxes="selectableRowsCheckboxes"
                 />
                 <tbody v-if="data.length === 0">
                     <slot name="firstRow"></slot>
                     <tr>
-                        <td class="text-center" :colspan="header.length + ((actions) ? 1 : 0)">
+                        <td class="text-center" :colspan="(header.length + ((actions) ? 1 : 0)) + ((selectableRows && selectableRowsCheckboxes) ? 1 : 0)">
                             <p class="mb-0" v-if="!loading">{{ i18nStrings.noData }}</p>
                             <loading-indicator
                                 v-else
@@ -55,6 +57,13 @@
                         :disable-buttons="disableButtons"
                         :running-actions="runningActions"
                         :actions-on-left="actionsOnLeft"
+                        :selectable-rows="selectableRows"
+                        :selectable-rows-checkboxes="selectableRowsCheckboxes"
+                        :selectable-rows-track-by="selectableRowsTrackBy"
+                        :selectable-rows-class="selectableRowsClass"
+                        @rowSelectToggle="onRowSelectToggle"
+                        :selected-row-ids="selectedRowIds"
+                        :row-index="index"
                     />
                     <tr v-if="Object.keys(aggregateFunctions).length > 0">
                         <th v-for="(cell, index) of header" :key="`aggregator-${cell.data}-${index}`" >
@@ -230,24 +239,6 @@ export default {
             }
         },
         /**
-         * Holds array of selected rows
-         */
-        selectedRows: {
-            type: Array,
-            required: false,
-            default () {
-                return []
-            }
-        },
-        /**
-         * Holds key for selection
-         */
-        selectedBy: {
-            type: String,
-            required: false,
-            default: 'id'
-        },
-        /**
          * Holds list of in-progress async actions
          */
         runningActions: {
@@ -258,6 +249,31 @@ export default {
         responsive: {
             required: false,
             default: false
+        },
+        selectableRows: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        selectableRowsCheckboxes: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        selectableRowsTrackBy: {
+            type: String,
+            required: false,
+            default: 'id'
+        },
+        selectableRowsClass: {
+            type: String,
+            required: false,
+            default: 'vue-datatable-selected-row'
+        },
+        value: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     data () {
@@ -270,6 +286,20 @@ export default {
         }
     },
     computed: {
+        selectedRows: {
+            get () {
+                return this.value
+            },
+            set (value) {
+                this.$emit('input', value)
+            }
+        },
+        flattenedSelectedRows () {
+            return this.value.map(item => flat.flatten(item, { safe: true }))
+        },
+        selectedRowIds () {
+            return this.flattenedSelectedRows.filter(item => item[this.selectableRowsTrackBy] !== undefined).map(item => item[this.selectableRowsTrackBy])
+        },
         responsiveClass () {
             if (this.responsive) {
                 return (this.responsive === true) ? 'table-responsive' : `table-responsive-${this.responsive}`
@@ -384,6 +414,7 @@ export default {
             return this.pagedData.map((row) => {
                 return {
                     row: flat.unflatten(row, { safe: true }),
+                    isSelected: (row[this.selectableRowsTrackBy] !== undefined) ? this.selectedRowIds.includes(row[this.selectableRowsTrackBy]) : false,
                     cells: this.header.map((item) => {
                         if (row.hasOwnProperty(item.data)) {
                             const data = { index: item.data, content: row[item.data], customComponent: item.customComponent }
@@ -396,30 +427,23 @@ export default {
                             if (Array.isArray(item.cellClassnames)) {
                                 data.cellClassnames = item.cellClassnames
                             }
+                            data.clickToSelect = item.clickToSelect !== false
                             return data
                         }
                         return { index: item.data, content: '', customComponent: false }
-                    }),
-                    selected: this.isSelected(row)
+                    })
                 }
             })
-        },
-        selectedArray () {
-            const tmp = []
-            for (const item of this.selectedRows) {
-                if (item[this.selectedBy] !== undefined) {
-                    tmp.push(item[this.selectedBy])
-                }
-            }
-            return tmp
         }
     },
     methods: {
-        isSelected (row) {
-            if (this.selectedArray.length === 0) {
-                return false
+        onRowSelectToggle (row) {
+            const flatRow = flat.flatten(row, { safe: true })
+            if (this.selectedRowIds.includes(flatRow[this.selectableRowsTrackBy])) {
+                this.selectedRows = this.selectedRows.filter((item) => flat.flatten(item, { safe: true })[this.selectableRowsTrackBy] !== flatRow[this.selectableRowsTrackBy])
+            } else {
+                this.selectedRows.push(row)
             }
-            return this.selectedArray.indexOf(row[this.selectedBy]) > -1
         },
         getPortionOfArray (sourceArray, offset, limit) {
             const content = []

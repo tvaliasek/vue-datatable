@@ -59,6 +59,10 @@ Columns are defined as Array of objects
 | aggregate | Function | no | undefined | Array reducer function for aggregation of filtered and flattened data. Whole flattened row is obtained as reducer currentValue. [See Array.reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) |
 | aggregateInitialValue | Any | no | undefined | Value to use as aggregation (reducer) initial value. |
 | aggregateText | String | no | undefined | Text to place before aggregation result. |
+| selectableRows | Boolean | no | false | Set to true to enable selectability of table rows. Do not forget to set v-model and "selectableRowsTrackBy" property. |
+| selectableRowsCheckboxes | Boolean | no | false | Set to true to perform selection of rows trough checkboxes displayed in first cell of rows. Please note that using this feature automatically disable selection of rows trough clicking on any data cell. | 
+| selectableRowsTrackBy | String | no | id | Unique data property of flattened row which should be used as tracking id for row selection. |
+| selectableRowsClass | String | no | vue-datatable-selected-row | CSS class added to selected rows (on TR tag). |
 
 ### DataTable actions definition
 
@@ -73,6 +77,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 | confirmText | String | no | undefined | Text to show on confirmation prompt |
 | customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row |
 | visibleIf | Function | no | undefined | Function which returns boolean to indicate if button should be visible, function will receive whole data row as first parameter |
+| clickToSelect | Boolean | no | true | Set to false to disable click to select row function for this column |
 
 ### Events
 

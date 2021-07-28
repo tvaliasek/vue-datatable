@@ -1,6 +1,7 @@
 <template>
     <thead class="__datatable-header">
         <tr>
+            <th v-if="selectableRows && selectableRowsCheckboxes"></th>
             <th v-if="actions && actionsOnLeft"></th>
             <data-header-cell
                 v-for="(cell, index) in header"
@@ -29,6 +30,16 @@ export default {
         DataHeaderCell
     },
     props: {
+        selectableRows: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        selectableRowsCheckboxes: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         header: {
             type: Array,
             required: true

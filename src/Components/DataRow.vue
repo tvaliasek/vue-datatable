@@ -1,5 +1,11 @@
 <template>
-    <tr :class="{ 'highlight-row': true, '__data-row-selected': row.selected }">
+    <tr :class="rowClassnames">
+        <td v-if="selectableRows && selectableRowsCheckboxes" class="vue-datatable-vertical-align-middle">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" :id="`vueDatatableRowCheckbox-${rowIndex}`" v-model="selectedModel">
+                <label class="custom-control-label" :for="`vueDatatableRowCheckbox-${rowIndex}`"></label>
+            </div>
+        </td>
         <data-row-buttons
             v-if="actions && actionsOnLeft"
             :actions-on-left="actionsOnLeft"
@@ -18,6 +24,7 @@
             :style="(item.cellStyle) ? item.cellStyle : undefined"
             :class="(Array.isArray(item.cellClassnames)) ? item.cellClassnames.join(' ') : undefined"
             @action="onAction"
+            @click="onCellClick(item)"
         >
             {{ item.content }}
         </component>
@@ -85,11 +92,60 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        selectableRows: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        selectableRowsCheckboxes: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        selectableRowsTrackBy: {
+            type: String,
+            required: false,
+            default: 'id'
+        },
+        selectableRowsClass: {
+            type: String,
+            required: false,
+            default: 'vue-datatable-selected-row'
+        },
+        rowIndex: {
+            type: Number,
+            required: true
+        }
+    },
+    computed: {
+        selected () {
+            return this.row.isSelected === true
+        },
+        selectedModel: {
+            get () {
+                return this.selected
+            },
+            set (value) {
+                this.$emit('rowSelectToggle', this.row.row)
+            }
+        },
+        rowClassnames () {
+            const classnames = { 'highlight-row': true }
+            if (this.selectableRows && this.selected) {
+                classnames[`${this.selectableRowsClass}`] = true
+            }
+            return classnames
         }
     },
     methods: {
         onAction (data) {
             this.$emit('action', data)
+        },
+        onCellClick (item) {
+            if (item.clickToSelect && this.selectableRows && !this.selectableRowsCheckboxes) {
+                this.selectedModel = !this.selectedModel
+            }
         }
     }
 }

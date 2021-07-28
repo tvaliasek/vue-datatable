@@ -20,7 +20,7 @@
                 </b-btn>
             </div>
         </div>
-
+        <p>Selected rows: {{selected.length}}</p>
         <data-table
             :auto-update="false"
             :header="header"
@@ -31,6 +31,11 @@
             :paging="true"
             @detail="onDetail"
             :actions-on-left="false"
+            :selectable-rows="true"
+            :selectable-rows-checkboxes="true"
+            :selectable-rows-track-by="'person.pvsid'"
+            :selectable-rows-class="'bg-primary text-white font-weight-bold'"
+            v-model="selected"
         />
     </div>
 </template>
@@ -46,7 +51,8 @@ export default {
         return {
             loading: true,
             dataset: [],
-            detail: null
+            detail: null,
+            selected: []
         }
     },
     computed: {
@@ -91,7 +97,7 @@ export default {
                     format (value) {
                         return (Array.isArray(value) ? value.join(', ') : `${value}`)
                     },
-                    aggregateText: 'Celkem: ',
+                    aggregateText: 'Total: ',
                     aggregate (accumulator, currentValue, index, array) {
                         return accumulator + (Array.isArray(currentValue.congress_numbers) ? currentValue.congress_numbers.length : 0)
                     },
