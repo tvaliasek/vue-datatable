@@ -9,8 +9,7 @@ import {
     BIconPause,
     BIconArrowsExpand,
     FormInputPlugin,
-    SpinnerPlugin,
-    FormCheckboxPlugin
+    SpinnerPlugin
 } from 'bootstrap-vue'
 import DataTable from './DataTable.vue'
 
@@ -21,7 +20,6 @@ export const DataTablePlugin = {
         Vue.use(DropdownPlugin)
         Vue.use(FormInputPlugin)
         Vue.use(SpinnerPlugin)
-        Vue.use(FormCheckboxPlugin)
         Vue.component('BIcon', BIcon)
         Vue.component('BIconArrowUp', BIconArrowUp)
         Vue.component('BIconArrowDown', BIconArrowDown)
