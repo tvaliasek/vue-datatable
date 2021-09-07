@@ -6,5 +6,6 @@ export default {
     search: 'Search',
     perPage: 'Records per page',
     buttonConfirmOk: 'Confirm',
-    buttonConfirmCancel: 'Cancel'
+    buttonConfirmCancel: 'Cancel',
+    exportButtonText: 'Export'
 }

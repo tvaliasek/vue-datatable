@@ -36,6 +36,8 @@
             :selectable-rows-track-by="'person.pvsid'"
             :selectable-rows-class="'bg-primary text-white font-weight-bold'"
             v-model="selected"
+            :exportable="true"
+            @export="onExport"
         />
     </div>
 </template>
@@ -138,6 +140,9 @@ export default {
         },
         onDetail (rowData) {
             this.detail = rowData
+        },
+        onExport (data) {
+            console.log(data)
         }
     }
 }

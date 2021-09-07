@@ -43,6 +43,7 @@ Define columns (header prop) and provide dataset as array of objects.
 | selectableRowsCheckboxes | Boolean | no | false | Set to true to perform selection of rows trough checkboxes displayed in first cell of rows. Please note that using this feature automatically disable selection of rows trough clicking on any data cell. | 
 | selectableRowsTrackBy | String | no | id | Unique data property of flattened row which should be used as tracking id for row selection. |
 | selectableRowsClass | String | no | vue-datatable-selected-row | CSS class added to selected rows (on TR tag). |
+| exportable | Boolean | no | false | Show export button |
 
 ### DataTable column definition
 
@@ -86,6 +87,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 | refresh | undefined | Emitted on update tick when auto update feature is enabled |
 | action | { event: nameOfEvent, row: object } | Emitted on click to any action button |
 | as defined in action | { ...row } | Emitted on click to any action button |
+| export | [{ cellDataProperty: cellContent }] | Emitted on click to export button |
 
 ## Run demo
 ``` sh

@@ -6,5 +6,6 @@ export default {
     search: 'Hledat',
     perPage: 'Záznamů na stránku',
     buttonConfirmOk: 'Potvrdit',
-    buttonConfirmCancel: 'Zrušit'
+    buttonConfirmCancel: 'Zrušit',
+    exportButtonText: 'Exportovat'
 }

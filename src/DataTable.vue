@@ -66,6 +66,8 @@
                         :row-index="index"
                     />
                     <tr v-if="Object.keys(aggregateFunctions).length > 0">
+                        <td v-if="selectableRows && selectableRowsCheckboxes">
+                        </td>
                         <th v-for="(cell, index) of header" :key="`aggregator-${cell.data}-${index}`" >
                             <span v-if="aggregateTexts[cell.data]">
                                 {{aggregateTexts[cell.data]}}<br/>
@@ -110,6 +112,15 @@
                         {{item}}
                     </b-dropdown-item>
                 </b-dropdown>
+                <b-btn
+                    v-if="exportable"
+                    variant="primary"
+                    size="sm"
+                    @click.prevent="onExport"
+                    class="ml-2"
+                >
+                    {{i18nStrings.exportButtonText}}
+                </b-btn>
             </div>
         </div>
     </div>
@@ -274,6 +285,11 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        exportable: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data () {
@@ -394,12 +410,7 @@ export default {
         },
         sortedData () {
             if (this.sortBy !== null) {
-                const sortFn = this.sortFunctions[this.sortBy] ?? naturalSort
-                if (sortFn !== null) {
-                    return ((this.sortDirection === 'DESC')
-                        ? [...this.filteredData].sort((a, b) => sortFn(a[this.sortBy], b[this.sortBy]))
-                        : [...this.filteredData].sort((a, b) => sortFn(b[this.sortBy], a[this.sortBy])))
-                }
+                return this.sortData(this.filteredData)
             }
             return this.filteredData
         },
@@ -411,7 +422,29 @@ export default {
             return this.sortedData
         },
         processedData () {
-            return this.pagedData.map((row) => {
+            return this.processData(this.pagedData)
+        }
+    },
+    methods: {
+        onExport () {
+            const header = {}
+            for (const entry of this.header) {
+                header[entry.data] = entry.text
+            }
+            const data = [
+                header,
+                ...this.processData(this.sortData(this.flattenedData)).map(entry => {
+                    const jsonObject = {}
+                    for (const item of entry.cells) {
+                        jsonObject[item.index] = item.content
+                    }
+                    return jsonObject
+                })
+            ]
+            this.$emit('export', data)
+        },
+        processData (pagedData) {
+            return pagedData.map((row) => {
                 return {
                     row: flat.unflatten(row, { safe: true }),
                     isSelected: (row[this.selectableRowsTrackBy] !== undefined) ? this.selectedRowIds.includes(row[this.selectableRowsTrackBy]) : false,
@@ -434,9 +467,16 @@ export default {
                     })
                 }
             })
-        }
-    },
-    methods: {
+        },
+        sortData (filteredData) {
+            const sortFn = this.sortFunctions[this.sortBy] ?? naturalSort
+            if (sortFn !== null) {
+                return ((this.sortDirection === 'DESC')
+                    ? [...filteredData].sort((a, b) => sortFn(a[this.sortBy], b[this.sortBy]))
+                    : [...filteredData].sort((a, b) => sortFn(b[this.sortBy], a[this.sortBy])))
+            }
+            return filteredData
+        },
         onRowSelectToggle (row) {
             const flatRow = flat.flatten(row, { safe: true })
             if (this.selectedRowIds.includes(flatRow[this.selectableRowsTrackBy])) {
