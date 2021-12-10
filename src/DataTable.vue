@@ -484,6 +484,9 @@ export default {
             } else {
                 this.selectedRows.push(row)
             }
+            this.$nextTick(() => {
+                this.$emit('input', this.selectedRows)
+            })
         },
         getPortionOfArray (sourceArray, offset, limit) {
             const content = []
