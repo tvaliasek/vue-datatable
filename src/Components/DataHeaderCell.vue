@@ -54,7 +54,7 @@ export default {
     data () {
         return {
             tm: null,
-            localFilterValue: ''
+            localFilterValue: ((this.filter.hasOwnProperty(this.dataField)) ? (this.filter[this.dataField] || '') : '')
         }
     },
     computed: {

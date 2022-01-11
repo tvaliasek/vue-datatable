@@ -290,6 +290,16 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        stateSaving: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        stateSavingUniqueKey: {
+            type: String,
+            required: false,
+            default: () => 'vueDataTable'
         }
     },
     data () {
@@ -299,6 +309,23 @@ export default {
             sortDirection: null,
             currentPage: 1,
             currentPageLimit: (this.pagingOptions.length > 0) ? this.pagingOptions[0] : 15
+        }
+    },
+    watch: {
+        filter () {
+            this.onSaveState()
+        },
+        sortBy () {
+            this.onSaveState()
+        },
+        sortDirection () {
+            this.onSaveState()
+        },
+        currentPage () {
+            this.onSaveState()
+        },
+        currentPageLimit () {
+            this.onSaveState()
         }
     },
     computed: {
@@ -425,7 +452,37 @@ export default {
             return this.processData(this.pagedData)
         }
     },
+    beforeMount () {
+        if (this.stateSaving && this.stateSavingUniqueKey) {
+            const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
+            if (state && state[this.stateSavingUniqueKey]) {
+                const tableState = state[this.stateSavingUniqueKey]
+                this.filter = tableState.filter || {}
+                this.sortBy = tableState.sortBy || null
+                this.sortDirection = tableState.sortDirection || null
+                this.currentPage = tableState.currentPage || 1
+                this.currentPageLimit = tableState.currentPageLimit || ((this.pagingOptions.length > 0) ? this.pagingOptions[0] : 15)
+            }
+        }
+    },
     methods: {
+        onSaveState () {
+            this.$nextTick(() => {
+                if (this.stateSaving && this.stateSavingUniqueKey) {
+                    const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
+                    if (state) {
+                        state[this.stateSavingUniqueKey] = {
+                            filter: this.filter,
+                            sortBy: this.sortBy,
+                            sortDirection: this.sortDirection,
+                            currentPage: this.currentPage,
+                            currentPageLimit: this.currentPageLimit
+                        }
+                    }
+                    sessionStorage.setItem('_vueDataTableStates', JSON.stringify(state))
+                }
+            })
+        },
         onExport () {
             const header = {}
             for (const entry of this.header) {

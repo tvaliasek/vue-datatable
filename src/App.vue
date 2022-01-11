@@ -38,6 +38,8 @@
             v-model="selected"
             :exportable="true"
             @export="onExport"
+            :state-saving="true"
+            :state-saving-unique-key="'table'"
         />
     </div>
 </template>
