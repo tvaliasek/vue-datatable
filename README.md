@@ -44,6 +44,9 @@ Define columns (header prop) and provide dataset as array of objects.
 | selectableRowsTrackBy | String | no | id | Unique data property of flattened row which should be used as tracking id for row selection. |
 | selectableRowsClass | String | no | vue-datatable-selected-row | CSS class added to selected rows (on TR tag). |
 | exportable | Boolean | no | false | Show export button |
+| stateSaving | Boolean | no | false | Enable internal state saving feature. State is saved in sessionStorage under specified key |
+| stateSavingUniqueKey | String | no | vueDataTable | a unique key under which the internal state will be stored | 
+
 
 ### DataTable column definition
 
