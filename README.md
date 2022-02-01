@@ -46,7 +46,7 @@ Define columns (header prop) and provide dataset as array of objects.
 | exportable | Boolean | no | false | Show export button |
 | stateSaving | Boolean | no | false | Enable internal state saving feature. State is saved in sessionStorage under specified key |
 | stateSavingUniqueKey | String | no | vueDataTable | a unique key under which the internal state will be stored | 
-
+| tableUniqueKey | String | no | generated from _uid | custom unique key for table |
 
 ### DataTable column definition
 

@@ -309,7 +309,6 @@ export default {
         }
     },
     data () {
-        console.log(this)
         return {
             filter: {},
             sortBy: null,
