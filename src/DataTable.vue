@@ -64,6 +64,7 @@
                         @rowSelectToggle="onRowSelectToggle"
                         :selected-row-ids="selectedRowIds"
                         :row-index="index"
+                        :table-unique-key="uniqueKey"
                     />
                     <tr v-if="Object.keys(aggregateFunctions).length > 0">
                         <td v-if="selectableRows && selectableRowsCheckboxes">
@@ -300,15 +301,22 @@ export default {
             type: String,
             required: false,
             default: () => 'vueDataTable'
+        },
+        tableUniqueKey: {
+            type: String,
+            required: false,
+            default: () => null
         }
     },
     data () {
+        console.log(this)
         return {
             filter: {},
             sortBy: null,
             sortDirection: null,
             currentPage: 1,
-            currentPageLimit: (this.pagingOptions.length > 0) ? this.pagingOptions[0] : 15
+            currentPageLimit: (this.pagingOptions.length > 0) ? this.pagingOptions[0] : 15,
+            uniqueKey: this.tableUniqueKey || `vueDataTable_${this._uid}`
         }
     },
     watch: {
