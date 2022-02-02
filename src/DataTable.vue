@@ -546,11 +546,8 @@ export default {
             if (this.selectedRowIds.includes(flatRow[this.selectableRowsTrackBy])) {
                 this.selectedRows = this.selectedRows.filter((item) => flat.flatten(item, { safe: true })[this.selectableRowsTrackBy] !== flatRow[this.selectableRowsTrackBy])
             } else {
-                this.selectedRows.push(row)
+                this.selectedRows = [...this.selectedRows, row]
             }
-            this.$nextTick(() => {
-                this.$emit('input', this.selectedRows)
-            })
         },
         getPortionOfArray (sourceArray, offset, limit) {
             const content = []
