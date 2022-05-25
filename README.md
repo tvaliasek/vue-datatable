@@ -95,7 +95,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 ## Run demo
 ``` sh
 # clone repo using your favourite git client
-gh repo clone @tvaliasek/vue-datatable ./vue-datatable
+gh repo clone tvaliasek/vue-datatable ./vue-datatable
 cd vue-datatable
 npm install
 npm run serve
