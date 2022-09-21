@@ -44,40 +44,51 @@
                 </tbody>
                 <tbody v-else>
                     <slot name="firstRow"></slot>
-                    <data-row
-                        v-for="(row, index) in processedData"
-                        :key="`row-${index}`"
-                        :row="row"
-                        :header="header"
-                        :filter="filter"
-                        :actions="actions"
-                        :buttons="buttons"
-                        @action="onAction"
-                        :i18n="i18nStrings"
-                        :disable-buttons="disableButtons"
-                        :running-actions="runningActions"
-                        :actions-on-left="actionsOnLeft"
-                        :selectable-rows="selectableRows"
-                        :selectable-rows-checkboxes="selectableRowsCheckboxes"
-                        :selectable-rows-track-by="selectableRowsTrackBy"
-                        :selectable-rows-class="selectableRowsClass"
-                        @rowSelectToggle="onRowSelectToggle"
-                        :selected-row-ids="selectedRowIds"
-                        :row-index="index"
-                    />
-                    <tr v-if="Object.keys(aggregateFunctions).length > 0">
-                        <td v-if="selectableRows && selectableRowsCheckboxes">
-                        </td>
-                        <th v-for="(cell, index) of header" :key="`aggregator-${cell.data}-${index}`" >
-                            <span v-if="aggregateTexts[cell.data]">
-                                {{aggregateTexts[cell.data]}}<br/>
-                            </span>
-                            <span v-if="typeof aggregateFunctions[cell.data] === 'function'">
-                                {{filteredData.reduce(aggregateFunctions[cell.data], aggregateInitialValues[cell.data])}}
-                            </span>
-                        </th>
-                        <th v-if="actions"></th>
-                    </tr>
+                    <td
+                        v-if="loading"
+                        class="text-center"
+                        :colspan="(header.length + ((actions) ? 1 : 0)) + ((selectableRows && selectableRowsCheckboxes) ? 1 : 0)"
+                    >
+                        <loading-indicator
+                            :i18n="i18nStrings"
+                        />
+                    </td>
+                    <template v-else>
+                        <data-row
+                            v-for="(row, index) in processedData"
+                            :key="`row-${index}`"
+                            :row="row"
+                            :header="header"
+                            :filter="filter"
+                            :actions="actions"
+                            :buttons="buttons"
+                            @action="onAction"
+                            :i18n="i18nStrings"
+                            :disable-buttons="disableButtons"
+                            :running-actions="runningActions"
+                            :actions-on-left="actionsOnLeft"
+                            :selectable-rows="selectableRows"
+                            :selectable-rows-checkboxes="selectableRowsCheckboxes"
+                            :selectable-rows-track-by="selectableRowsTrackBy"
+                            :selectable-rows-class="selectableRowsClass"
+                            @rowSelectToggle="onRowSelectToggle"
+                            :selected-row-ids="selectedRowIds"
+                            :row-index="index"
+                        />
+                        <tr v-if="Object.keys(aggregateFunctions).length > 0">
+                            <td v-if="selectableRows && selectableRowsCheckboxes">
+                            </td>
+                            <th v-for="(cell, index) of header" :key="`aggregator-${cell.data}-${index}`" >
+                                <span v-if="aggregateTexts[cell.data]">
+                                    {{aggregateTexts[cell.data]}}<br/>
+                                </span>
+                                <span v-if="typeof aggregateFunctions[cell.data] === 'function'">
+                                    {{filteredData.reduce(aggregateFunctions[cell.data], aggregateInitialValues[cell.data])}}
+                                </span>
+                            </th>
+                            <th v-if="actions"></th>
+                        </tr>
+                    </template>
                     <slot name="lastRow"></slot>
                 </tbody>
             </table>
