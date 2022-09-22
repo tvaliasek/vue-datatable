@@ -29,11 +29,13 @@
                     :selectable-rows="selectableRows"
                     :selectable-rows-checkboxes="selectableRowsCheckboxes"
                 />
-                <tbody v-if="data.length === 0">
+                <tbody v-if="loading || data.length === 0">
                     <slot name="firstRow"></slot>
                     <tr>
                         <td class="text-center" :colspan="(header.length + ((actions) ? 1 : 0)) + ((selectableRows && selectableRowsCheckboxes) ? 1 : 0)">
-                            <p class="mb-0" v-if="!loading">{{ i18nStrings.noData }}</p>
+                            <p class="mb-0" v-if="!loading">
+                                {{ i18nStrings.noData }}
+                            </p>
                             <loading-indicator
                                 v-else
                                 :i18n="i18nStrings"
