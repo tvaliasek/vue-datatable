@@ -1,6 +1,6 @@
 # Simple Bootstrap Vue 2 data table
 
-Very naive and simple data table for Bootstrap 4 and Vue 2, currently without direct support for remote dataset adapters, but good enough for use in some of my personal projects. 
+Very naive and simple data table for Bootstrap 4 and Vue 2.
 
 ## Install
 ``` sh
@@ -47,6 +47,8 @@ Define columns (header prop) and provide dataset as array of objects.
 | stateSaving | Boolean | no | false | Enable internal state saving feature. State is saved in sessionStorage under specified key |
 | stateSavingUniqueKey | String | no | vueDataTable | a unique key under which the internal state will be stored | 
 | tableUniqueKey | String | no | generated from _uid | custom unique key for table |
+| remoteDataMode | Boolean | no | false | set to true to enable remote data mode |
+| remoteDataTotalRows | Number | no | 0 | required for pagination to work when remote data mode is enabled, total number of rows in remote dataset |
 
 ### DataTable column definition
 
@@ -91,6 +93,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 | action | { event: nameOfEvent, row: object } | Emitted on click to any action button |
 | as defined in action | { ...row } | Emitted on click to any action button |
 | export | [{ cellDataProperty: cellContent }] | Emitted on click to export button |
+| remote-data-refresh | `{ filter: {key: filterQuery}[], sortBy: string, sortDirection: string, currentPage: number, currentPageLimit: number }` | Emitted on any display settings change during remote data mode, automatically debounced |
 
 ## Run demo
 ``` sh

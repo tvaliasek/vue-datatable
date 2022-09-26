@@ -93,7 +93,7 @@
                     v-if="paging"
                     size="sm"
                     v-model="currentPage"
-                    :total-rows="filteredData.length"
+                    :total-rows="(this.remoteDataMode) ? this.remoteDataTotalRows : filteredData.length"
                     :per-page="currentPageLimit"
                     first-number
                     last-number
@@ -147,6 +147,25 @@ export default {
         AutoUpdateCounter
     },
     props: {
+        /**
+         * Set to true to enable remote data mode, on every display settings change the remote-data-refresh event is emitted
+         */
+        remoteDataMode: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        /**
+         * Total number of rows for remote data mode pagination
+         */
+        remoteDataTotalRows: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        /**
+         * Flag for placing action on left side of the table
+         */
         actionsOnLeft: {
             type: Boolean,
             required: false,
@@ -323,18 +342,23 @@ export default {
     watch: {
         filter () {
             this.onSaveState()
+            this.onDataRefresh()
         },
         sortBy () {
             this.onSaveState()
+            this.onDataRefresh()
         },
         sortDirection () {
             this.onSaveState()
+            this.onDataRefresh()
         },
         currentPage () {
             this.onSaveState()
+            this.onDataRefresh()
         },
         currentPageLimit () {
             this.onSaveState()
+            this.onDataRefresh()
         }
     },
     computed: {
@@ -413,7 +437,7 @@ export default {
             })
         },
         filteredData () {
-            if (this.filter === undefined || this.filter === null || Object.keys(this.filter).length === 0) {
+            if (this.remoteDataMode || this.filter === undefined || this.filter === null || Object.keys(this.filter).length === 0) {
                 return this.flattenedData
             }
             const activeFilters = Object.keys(this.filter)
@@ -445,13 +469,13 @@ export default {
             })
         },
         sortedData () {
-            if (this.sortBy !== null) {
+            if (!this.remoteDataMode && this.sortBy !== null) {
                 return this.sortData(this.filteredData)
             }
             return this.filteredData
         },
         pagedData () {
-            if (this.paging) {
+            if (!this.remoteDataMode && this.paging) {
                 const offset = ((-1 + this.currentPage) * this.currentPageLimit)
                 return this.getPortionOfArray(this.sortedData, offset, this.currentPageLimit)
             }
@@ -491,6 +515,21 @@ export default {
                     sessionStorage.setItem('_vueDataTableStates', JSON.stringify(state))
                 }
             })
+        },
+        onRemoteDataRefresh () {
+            clearTimeout(this._refreshTm)
+            this._refreshTm = setTimeout(() => {
+                this.$emit(
+                    'remote-data-refresh',
+                    JSON.parse(JSON.stringify({
+                        filter: this.filter,
+                        sortBy: this.sortBy,
+                        sortDirection: this.sortDirection,
+                        currentPage: this.currentPage,
+                        currentPageLimit: this.currentPageLimit
+                    }))
+                )
+            }, 250)
         },
         onExport () {
             const header = {}
@@ -574,7 +613,11 @@ export default {
             }
         },
         onRefresh () {
-            this.$emit('refresh')
+            if (this.remoteDataMode) {
+                this.onRemoteDataRefresh()
+            } else {
+                this.$emit('refresh')
+            }
         },
         onFilter (value) {
             this.filter = { ...value }
