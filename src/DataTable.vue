@@ -342,23 +342,23 @@ export default {
     watch: {
         filter () {
             this.onSaveState()
-            this.onDataRefresh()
+            this.onRemoteDataRefresh()
         },
         sortBy () {
             this.onSaveState()
-            this.onDataRefresh()
+            this.onRemoteDataRefresh()
         },
         sortDirection () {
             this.onSaveState()
-            this.onDataRefresh()
+            this.onRemoteDataRefresh()
         },
         currentPage () {
             this.onSaveState()
-            this.onDataRefresh()
+            this.onRemoteDataRefresh()
         },
         currentPageLimit () {
             this.onSaveState()
-            this.onDataRefresh()
+            this.onRemoteDataRefresh()
         }
     },
     computed: {
