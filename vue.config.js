@@ -1,4 +1,10 @@
+
 module.exports = {
+    pluginOptions: {
+        webpackBundleAnalyzer: {
+            openAnalyzer: false
+        }
+    },
     chainWebpack: config => {
         config.externals(
             (
