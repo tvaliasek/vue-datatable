@@ -4,15 +4,22 @@
         :variant="(running) ? 'success' : 'primary'"
         @click.prevent="onClick"
     >
-        <b-icon-arrow-repeat v-show="!running" />
-        <b-icon-pause v-show="running" />
+        <bs-icon-arrow-repeat v-show="!running" />
+        <bs-icon-pause v-show="running" />
         {{ text }}
     </b-btn>
 </template>
 
 <script>
+import bsIconArrowRepeat from '../Icons/bsIconArrowRepeat.vue'
+import bsIconPause from '../Icons/bsIconPause.vue'
+
 export default {
     name: 'AutoUpdateCounter',
+    components: {
+        bsIconArrowRepeat,
+        bsIconPause
+    },
     data () {
         return {
             tm: null,

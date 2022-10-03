@@ -1,31 +1,20 @@
-import {
-    ButtonPlugin,
-    PaginationPlugin,
-    DropdownPlugin,
-    BIcon,
-    BIconArrowUp,
-    BIconArrowDown,
-    BIconArrowRepeat,
-    BIconPause,
-    BIconArrowsExpand,
-    FormInputPlugin,
-    SpinnerPlugin
-} from 'bootstrap-vue'
+import { BButton } from 'bootstrap-vue/esm/components/button/button'
+import { BPagination } from 'bootstrap-vue/esm/components/pagination/pagination'
+import { BDropdown, BDropdownItem } from 'bootstrap-vue/esm/components/dropdown'
+import { BFormInput } from 'bootstrap-vue/esm/components/form-input/form-input'
+import { BSpinner } from 'bootstrap-vue/esm/components/spinner/spinner'
+
 import DataTable from './DataTable.vue'
 
 export const DataTablePlugin = {
     install (Vue) {
-        Vue.use(ButtonPlugin)
-        Vue.use(PaginationPlugin)
-        Vue.use(DropdownPlugin)
-        Vue.use(FormInputPlugin)
-        Vue.use(SpinnerPlugin)
-        Vue.component('BIcon', BIcon)
-        Vue.component('BIconArrowUp', BIconArrowUp)
-        Vue.component('BIconArrowDown', BIconArrowDown)
-        Vue.component('BIconArrowRepeat', BIconArrowRepeat)
-        Vue.component('BIconPause', BIconPause)
-        Vue.component('BIconArrowsExpand', BIconArrowsExpand)
+        Vue.component(BButton.options.name, BButton)
+        Vue.component('b-btn', BButton)
+        Vue.component(BPagination.options.name, BPagination)
+        Vue.component(BDropdown.options.name, BDropdown)
+        Vue.component(BDropdownItem.options.name, BDropdownItem)
+        Vue.component(BFormInput.options.name, BFormInput)
+        Vue.component(BSpinner.options.name, BSpinner)
         Vue.component(DataTable.name, DataTable)
     }
 }

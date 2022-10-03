@@ -1,6 +1,6 @@
 {
   "name": "@tvaliasek/vue-datatable",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "private": false,
   "main": "dist/vueDataTable.umd.min.js",
   "module": "dist/vueDataTable.common.js",

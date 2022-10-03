@@ -1,7 +1,7 @@
 <template>
     <th>
         <a @click.prevent="onSort" href="javascript:void(0);" class="d-block mb-1">
-            <b-icon v-show="sortable" :icon="sortIconName"/> {{ text }}
+            <bs-icon v-show="sortable" :icon="sortIconName"/> {{ text }}
         </a>
         <b-form-input
             size="sm"
@@ -13,8 +13,13 @@
 </template>
 
 <script>
+import bsIcon from '../Icons/bsIcon.vue'
+
 export default {
     name: 'DataHeaderCell',
+    components: {
+        bsIcon
+    },
     props: {
         i18n: {
             type: Object,
