@@ -15,7 +15,7 @@
         </div>
         <slot name="beforeTable"></slot>
         <div :class="responsiveClass">
-            <table class="table table-sm table-bordered table-striped mb-0">
+            <table :class="tableClassnames">
                 <data-header
                     :actions="actions"
                     :header="header"
@@ -327,6 +327,11 @@ export default {
             type: String,
             required: false,
             default: () => null
+        },
+        tableClass: {
+            type: String,
+            required: false,
+            default: null
         }
     },
     data () {
@@ -362,6 +367,16 @@ export default {
         }
     },
     computed: {
+        tableClassnames () {
+            let classNames = (this.tableClass || '').split(' ').filter(item => item)
+            if (classNames.length === 0) {
+                classNames = 'table table-sm table-bordered table-striped mb-0'.split(' ')
+            }
+            if (this.responsive) {
+                classNames.push('table-responsive')
+            }
+            return classNames.join(' ')
+        },
         selectedRows: {
             get () {
                 return this.value
