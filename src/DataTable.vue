@@ -372,9 +372,6 @@ export default {
             if (classNames.length === 0) {
                 classNames = 'table table-sm table-bordered table-striped mb-0'.split(' ')
             }
-            if (this.responsive) {
-                classNames.push('table-responsive')
-            }
             return classNames.join(' ')
         },
         selectedRows: {
