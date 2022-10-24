@@ -562,10 +562,13 @@ export default {
                             if (typeof item.cellStyle === 'function') {
                                 data.cellStyle = item.cellStyle(data.index, data.content, { ...row })
                             }
+                            if (typeof item.cellStyle === 'string') {
+                                data.cellStyle = item.cellStyle
+                            }
                             if (Array.isArray(item.cellClassnames)) {
                                 data.cellClassnames = item.cellClassnames
                             }
-                            data.clickToSelect = item.clickToSelect !== false
+                            data.clickToSelect = item.clickToSelect !== false && item.clickToSelect !== undefined
                             return data
                         }
                         return { index: item.data, content: '', customComponent: false }
