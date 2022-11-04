@@ -567,7 +567,7 @@ export default {
                     isSelected: (row[this.selectableRowsTrackBy] !== undefined) ? this.selectedRowIds.includes(row[this.selectableRowsTrackBy]) : false,
                     cells: this.header.map((item) => {
                         if (row.hasOwnProperty(item.data)) {
-                            const data = { index: item.data, content: row[item.data], customComponent: item.customComponent }
+                            const data = { index: item.data, content: row[item.data], customComponent: (typeof item.customComponent === 'function') ? item.customComponent() : item.customComponent }
                             if (typeof item.format === 'function') {
                                 data.content = item.format(data.content)
                             }

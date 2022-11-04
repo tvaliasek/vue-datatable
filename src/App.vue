@@ -68,6 +68,7 @@
 <script>
 import axios from 'axios'
 import CustomButton from './CustomButton.vue'
+import CustomCell from './CustomCell.vue'
 const DATASET_URL = 'https://www.govtrack.us/api/v2/role?current=true&role_type=senator'
 
 export default {
@@ -96,7 +97,10 @@ export default {
                     text: 'Party',
                     data: 'party',
                     sortable: true,
-                    filterable: true
+                    filterable: true,
+                    customComponent () {
+                        return CustomCell
+                    }
                 },
                 {
                     text: 'Start date',
