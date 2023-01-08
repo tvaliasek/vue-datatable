@@ -1,11 +1,6 @@
-public
 tests
-.browserslistrc
-.editorconfig
-.eslintrc.js
-.gitignore
-.npmignore
-babel.config.js
-jest.config.js
-README.md
-vue.config.js
+public
+_old
+.*
+*.config.js
+*.md

@@ -3,7 +3,7 @@
         <div v-if="confirm === null">
             <component
                 v-for="(button, index) in buttonsList"
-                :is="(button.customComponent !== undefined) ? button.customComponent() : 'b-btn'"
+                :is="(button.customComponent !== undefined) ? button.customComponent() : 'b-button'"
                 :row="(button.customComponent !== undefined) ? row : undefined"
                 :key="`button-${index}${button.event}`"
                 :size="(button.customComponent !== undefined) ? undefined : 'sm'"
@@ -18,22 +18,22 @@
         <div class="whitespace-nowrap text-center" v-else>
             <p class="mb-0">{{confirm.confirmText}}</p>
             <p class="whitespace-nowrap mb-0">
-                <b-btn
+                <b-button
                     size="sm"
                     variant="primary"
                     @click.prevent="onConfirm"
                     class="ml-1"
                 >
                     {{i18n.buttonConfirmOk}}
-                </b-btn>
-                <b-btn
+                </b-button>
+                <b-button
                     size="sm"
                     variant="danger"
                     class="ml-1"
                     @click.prevent="onCancel"
                 >
                     {{i18n.buttonConfirmCancel}}
-                </b-btn>
+                </b-button>
             </p>
         </div>
     </td>

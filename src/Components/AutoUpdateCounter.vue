@@ -1,5 +1,5 @@
 <template>
-    <b-btn
+    <b-button
         size="sm"
         :variant="(running) ? 'success' : 'primary'"
         @click.prevent="onClick"
@@ -7,7 +7,7 @@
         <bs-icon-arrow-repeat v-show="!running" />
         <bs-icon-pause v-show="running" />
         {{ text }}
-    </b-btn>
+    </b-button>
 </template>
 
 <script>

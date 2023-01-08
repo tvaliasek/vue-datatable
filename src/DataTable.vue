@@ -115,7 +115,7 @@
                         {{item}}
                     </b-dropdown-item>
                 </b-dropdown>
-                <b-btn
+                <b-button
                     v-if="exportable"
                     variant="primary"
                     size="sm"
@@ -123,7 +123,7 @@
                     class="ml-2"
                 >
                     {{i18nStrings.exportButtonText}}
-                </b-btn>
+                </b-button>
             </div>
         </div>
     </div>
@@ -146,6 +146,13 @@ export default {
         LoadingIndicator,
         AutoUpdateCounter
     },
+    emits: [
+        'update:modelValue',
+        'action',
+        'remote-data-refresh',
+        'refresh',
+        'export'
+    ],
     props: {
         /**
          * Set to true to enable remote data mode, on every display settings change the remote-data-refresh event is emitted
@@ -303,7 +310,7 @@ export default {
             required: false,
             default: 'vue-datatable-selected-row'
         },
-        value: {
+        modelValue: {
             type: Array,
             required: false,
             default: () => []
@@ -376,14 +383,14 @@ export default {
         },
         selectedRows: {
             get () {
-                return this.value
+                return this.modelValue
             },
             set (value) {
-                this.$emit('input', value)
+                this.$emit('update:modelValue', value)
             }
         },
         flattenedSelectedRows () {
-            return this.value.map(item => flat.flatten(item, { safe: true }))
+            return this.modelValue.map(item => flat.flatten(item, { safe: true }))
         },
         selectedRowIds () {
             return this.flattenedSelectedRows.filter(item => item[this.selectableRowsTrackBy] !== undefined).map(item => item[this.selectableRowsTrackBy])
