@@ -1,5 +1,5 @@
 <template>
-    <span class="font-weight-bold ml-2">{{row.row.description}}</span>
+    <span class="font-weight-bold me-2">{{row.row.description}}</span>
 </template>
 
 <script>

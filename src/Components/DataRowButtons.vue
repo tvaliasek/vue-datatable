@@ -1,5 +1,5 @@
 <template>
-    <td :class="{ 'text-right': !actionsOnLeft, 'whitespace-nowrap __datatable-actions': true }">
+    <td :class="{ 'text-end': !actionsOnLeft, 'whitespace-nowrap __datatable-actions': true }">
         <div v-if="confirm === null">
             <component
                 v-for="(button, index) in buttonsList"
@@ -7,7 +7,7 @@
                 :row="(button.customComponent !== undefined) ? row : undefined"
                 :key="`button-${index}${button.event}`"
                 :size="(button.customComponent !== undefined) ? undefined : 'sm'"
-                :class="(button.customComponent !== undefined) ? undefined : 'ml-1'"
+                :class="(button.customComponent !== undefined) ? undefined : 'me-1'"
                 :variant="(button.customComponent !== undefined) ? undefined : button.variant"
                 @click.prevent="(button.customComponent !== undefined) ? undefined : onButtonClick(button)"
                 :disabled="disableButtons"
@@ -22,14 +22,14 @@
                     size="sm"
                     variant="primary"
                     @click.prevent="onConfirm"
-                    class="ml-1"
+                    class="me-1"
                 >
                     {{i18n.buttonConfirmOk}}
                 </b-button>
                 <b-button
                     size="sm"
                     variant="danger"
-                    class="ml-1"
+                    class="me-1"
                     @click.prevent="onCancel"
                 >
                     {{i18n.buttonConfirmCancel}}

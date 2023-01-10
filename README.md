@@ -1,6 +1,6 @@
-# Simple Bootstrap Vue 2 data table
+# Simple Bootstrap 5 and Vue 3 data table
 
-Very naive and simple data table for Bootstrap 4 and Vue 2.
+Very naive and simple data table for Bootstrap 5 and Vue 3. For Vue 2 use version 1.x.
 
 ## Install
 ``` sh
@@ -8,15 +8,21 @@ npm install @tvaliasek/vue-datatable
 
 # peer dependencies
 npm install bootstrap
-npm install bootstrap-vue
+npm install bootstrap-vue-3
 ```
 
 ``` js
-import Vue from 'vue'
+import { createApp } from 'vue'
 import { DataTablePlugin } from '@tvaliasek/vue-datatable'
-import '@tvaliasek/vue-datatable/dist/vueDataTable.css'
 
-Vue.use(DataTablePlugin)
+import '@tvaliasek/vue-datatable/dist/data-table.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
+
+const app = createApp(App)
+app.use(DataTablePlugin)
+
+app.mount('#app')
 ```
 
 ## Usage
@@ -101,5 +107,5 @@ Actions are defined as Array of objects, each action generates button and emits 
 gh repo clone tvaliasek/vue-datatable ./vue-datatable
 cd vue-datatable
 npm install
-npm run serve
+npm run dev
 ```

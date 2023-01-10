@@ -4,7 +4,7 @@
             <div class="col-12 col-md-6 mb-1">
                 <slot name="left"></slot>
             </div>
-            <div class="col-12 col-md-6 mb-1 text-right">
+            <div class="col-12 col-md-6 mb-1 text-end">
                 <slot name="right"></slot>
                 <auto-update-counter
                     v-if="autoUpdate"
@@ -64,7 +64,6 @@
                         :selectable-rows-track-by="selectableRowsTrackBy"
                         :selectable-rows-class="selectableRowsClass"
                         @rowSelectToggle="onRowSelectToggle"
-                        :selected-row-ids="selectedRowIds"
                         :row-index="index"
                         :table-unique-key="uniqueKey"
                     />
@@ -99,7 +98,7 @@
                     last-number
                 />
             </div>
-            <div class="mb-1 text-md-right">
+            <div class="mb-1 text-md-end">
                 <slot name="bottomRight"></slot>
                 <b-dropdown
                     v-if="paging"
@@ -115,12 +114,13 @@
                         {{item}}
                     </b-dropdown-item>
                 </b-dropdown>
+
                 <b-button
                     v-if="exportable"
                     variant="primary"
                     size="sm"
                     @click.prevent="onExport"
-                    class="ml-2"
+                    class="ms-2"
                 >
                     {{i18nStrings.exportButtonText}}
                 </b-button>

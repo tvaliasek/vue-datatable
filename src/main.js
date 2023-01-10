@@ -1,14 +1,11 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
+import { DataTablePlugin } from '.'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import { DataTablePlugin } from './index.js'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
-Vue.config.productionTip = false
+const app = createApp(App)
+app.use(DataTablePlugin)
 
-Vue.use(DataTablePlugin)
-
-new Vue({
-    render: h => h(App)
-}).$mount('#app')
+app.mount('#app')

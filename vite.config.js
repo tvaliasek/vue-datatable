@@ -22,8 +22,8 @@ export default defineConfig({
     build: {
         lib: {
             entry: resolve(__dirname, 'src/lib-main.js'),
-            name: 'SchemaForm',
-            fileName: 'schema-form'
+            name: 'DataTable',
+            fileName: 'data-table'
         },
         rollupOptions: {
             external: [
@@ -36,7 +36,8 @@ export default defineConfig({
             output: {
                 globals: {
                     vue: 'Vue'
-                }
+                },
+                assetFileNames: 'data-table.[ext]'
             }
         }
     }
