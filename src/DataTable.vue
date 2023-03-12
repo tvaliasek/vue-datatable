@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="{ '__datatable-sm': size === 'sm' }">
         <div class="row align-items-end mb-1 px-2">
             <div class="col-12 col-md-6 mb-1">
                 <slot name="left"></slot>
@@ -94,8 +94,8 @@
                     v-model="currentPage"
                     :total-rows="(this.remoteDataMode) ? this.remoteDataTotalRows : filteredData.length"
                     :per-page="currentPageLimit"
-                    first-number
-                    last-number
+                    :first-number="true"
+                    :last-number="((this.remoteDataMode) ? this.remoteDataTotalRows : filteredData.length) > currentPageLimit"
                 />
             </div>
             <div class="mb-1 text-md-end">
@@ -339,6 +339,10 @@ export default {
             type: String,
             required: false,
             default: null
+        },
+        size: {
+            type: String,
+            required: false
         }
     },
     data () {
@@ -377,7 +381,7 @@ export default {
         tableClassnames () {
             let classNames = (this.tableClass || '').split(' ').filter(item => item)
             if (classNames.length === 0) {
-                classNames = 'table table-sm table-bordered table-striped mb-0'.split(' ')
+                classNames = ['table table-sm table-bordered table-striped mb-0']
             }
             return classNames.join(' ')
         },
@@ -657,7 +661,7 @@ export default {
     vertical-align: top;
 }
 
-table.table-sm-font, .table-sm-font table {
+table.__datatable-sm, .__datatable-sm table {
     font-size: 14px;
 }
 </style>
