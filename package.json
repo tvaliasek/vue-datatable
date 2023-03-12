@@ -1,7 +1,21 @@
 {
-  "name": "@cocobox/spa-admin",
-  "version": "1.0.1",
-  "private": true,
+  "name": "@tvaliasek/vue-datatable",
+  "version": "2.0.0",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/data-table.umd.js",
+  "module": "dist/data-table.mjs",
+  "homepage": "https://github.com/tvaliasek/vue-datatable#readme",
+  "bugs": {
+    "url": "https://github.com/tvaliasek/vue-datatable/issues"
+  },
+  "keywords": [
+    "datatable",
+    "bootstrap",
+    "vue"
+  ],
   "license": "MIT",
   "author": {
     "name": "Tomáš Valiašek",
@@ -16,8 +30,8 @@
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
-    "bootstrap-vue-3": "^0.5.1",
-    "axios": "^1.2.2",
+    "bootstrap-vue-next": "^0.7.3",
+    "unplugin-vue-components": "^0.24.1",
     "vue": "^3.2.45"
   },
   "devDependencies": {
@@ -25,11 +39,11 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-standard": "^8.0.1",
     "@vue/test-utils": "^2.2.6",
+    "axios": "^1.2.2",
     "eslint": "^8.31.0",
     "eslint-plugin-vue": "^9.8.0",
     "jsdom": "^20.0.3",
     "sass": "^1.57.1",
-    "unplugin-vue-components": "^0.22.11",
     "vite": "^4.0.0",
     "vitest": "^0.25.6"
   }

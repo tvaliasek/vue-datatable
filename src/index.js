@@ -1,4 +1,4 @@
-import { BButton, BPagination, BDropdown, BDropdownItem, BFormInput, BSpinner } from 'bootstrap-vue-3'
+import { BButton, BPagination, BDropdown, BDropdownItem, BFormInput, BSpinner } from 'bootstrap-vue-next'
 
 import DataTable from './DataTable.vue'
 

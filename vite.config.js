@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { fileURLToPath, URL } from 'node:url'
 import Components from 'unplugin-vue-components/vite'
-import { BootstrapVue3Resolver } from 'unplugin-vue-components/resolvers'
+import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
@@ -11,7 +11,7 @@ export default defineConfig({
     plugins: [
         vue(),
         Components({
-            resolvers: [BootstrapVue3Resolver()]
+            resolvers: [BootstrapVueNextResolver()]
         })
     ],
     resolve: {
@@ -29,7 +29,7 @@ export default defineConfig({
             external: [
                 'vue',
                 'bootstrap',
-                'bootstrap-vue-3',
+                'bootstrap-vue-next',
                 'vue',
                 'vuelidate'
             ],
