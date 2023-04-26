@@ -24,13 +24,18 @@ export default {
         return {
             tm: null,
             running: false,
-            counter: 30
+            counter: this.autoUpdateLimit
         }
     },
     props: {
         i18n: {
             type: Object,
             required: true
+        },
+        autoUpdateLimit: {
+            type: Number,
+            required: false,
+            default: 30
         }
     },
     computed: {
@@ -41,7 +46,7 @@ export default {
     methods: {
         onClick () {
             clearInterval(this.tm)
-            this.counter = 30
+            this.counter = this.autoUpdateLimit
             if (this.running) {
                 this.running = false
             } else {
@@ -53,7 +58,7 @@ export default {
             this.counter--
             if (this.counter <= 0) {
                 this.$emit('refresh')
-                this.counter = 30
+                this.counter = this.autoUpdateLimit
             }
         }
     },

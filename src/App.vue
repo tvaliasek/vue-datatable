@@ -22,7 +22,8 @@
         </div>
         <p>Selected rows: {{selected.length}}</p>
         <data-table
-            :auto-update="false"
+            :auto-update="true"
+            :auto-update-limit="5"
             :header="header"
             :loading="loading"
             :data="dataset"
@@ -40,27 +41,7 @@
             @export="onExport"
             :state-saving="true"
             :state-saving-unique-key="'table'"
-        />
-
-        <data-table
-            :auto-update="false"
-            :header="header"
-            :loading="loading"
-            :data="dataset2"
-            :buttons="buttons"
-            lang="en_US"
-            :paging="true"
-            @detail="onDetail"
-            :actions-on-left="false"
-            :selectable-rows="true"
-            :selectable-rows-checkboxes="true"
-            :selectable-rows-track-by="'person.pvsid'"
-            :selectable-rows-class="'bg-primary text-white font-weight-bold'"
-            v-model="selected2"
-            :exportable="true"
-            @export="onExport"
-            :state-saving="true"
-            :state-saving-unique-key="'table'"
+            @refresh="onRefresh"
         />
     </div>
 </template>
@@ -155,6 +136,9 @@ export default {
         this.loadDataset()
     },
     methods: {
+        onRefresh () {
+            console.log('Refreshing...')
+        },
         loadDataset () {
             this.loading = true
             this.dataset = []

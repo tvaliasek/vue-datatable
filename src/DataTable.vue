@@ -10,6 +10,7 @@
                     v-if="autoUpdate"
                     @refresh="onRefresh"
                     :i18n="i18nStrings"
+                    :auto-update-limit="autoUpdateLimit"
                 />
             </div>
         </div>
@@ -343,6 +344,11 @@ export default {
         size: {
             type: String,
             required: false
+        },
+        autoUpdateLimit: {
+            type: Number,
+            required: false,
+            default: 30
         }
     },
     data () {

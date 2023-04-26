@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
-    "bootstrap-vue-next": "^0.7.3",
+    "bootstrap-vue-next": "^0.8.7",
     "unplugin-vue-components": "^0.24.1",
     "vue": "^3.2.45"
   },
