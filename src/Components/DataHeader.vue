@@ -19,15 +19,35 @@
             />
             <th v-if="actions && !actionsOnLeft"></th>
         </tr>
+        <tr v-if="header.filter(item => item.filterable === true)">
+            <th v-if="selectableRows && selectableRowsCheckboxes"></th>
+            <th v-if="actions && actionsOnLeft"></th>
+            <th
+                v-for="(cell, index) in header"
+                :key="`header-filter-${index}`"
+            >
+                <data-header-cell-filter
+                    v-if="cell.filterable"
+                    :data-field="cell.data"
+                    :filter="filter"
+                    @filter="onFilter"
+                    :i18n="i18n"
+                />
+            </th>
+            <th v-if="actions && !actionsOnLeft"></th>
+        </tr>
     </thead>
 </template>
 
 <script>
 import DataHeaderCell from './DataHeaderCell.vue'
+import DataHeaderCellFilter from './DataHeaderCellFilter.vue'
+
 export default {
     name: 'DataHeader',
     components: {
-        DataHeaderCell
+        DataHeaderCell,
+        DataHeaderCellFilter
     },
     props: {
         selectableRows: {
