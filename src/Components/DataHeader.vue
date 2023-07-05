@@ -3,7 +3,7 @@
         <tr>
             <th v-if="selectableRows && selectableRowsCheckboxes"></th>
             <th v-if="actions && actionsOnLeft"></th>
-            <data-header-cell
+            <DataHeaderCell
                 v-for="(cell, index) in header"
                 :key="`header-${index}`"
                 :text="cell.text"
@@ -26,7 +26,7 @@
                 v-for="(cell, index) in header"
                 :key="`header-filter-${index}`"
             >
-                <data-header-cell-filter
+                <DataHeaderCellFilter
                     v-if="cell.filterable"
                     :data-field="cell.data"
                     :filter="filter"
@@ -39,65 +39,36 @@
     </thead>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ColumnDefinition } from '@/interfaces';
 import DataHeaderCell from './DataHeaderCell.vue'
 import DataHeaderCellFilter from './DataHeaderCellFilter.vue'
+const props = withDefaults(defineProps<{
+    selectableRows: boolean
+    selectableRowsCheckboxes: boolean
+    header: ColumnDefinition[]
+    actionsOnLeft: boolean
+    actions: boolean
+    sort?: string | null
+    sortDirection?: string | null
+    filter?: Record<string, string>
+    i18n: Record<string, string>
+}>(), {
+    selectableRows: false,
+    selectableRowsCheckboxes: false,
+    actionsOnLeft: false,
+    sort: null,
+    sortDirection: null,
+    filter: () => ({})
+})
 
-export default {
-    name: 'DataHeader',
-    components: {
-        DataHeaderCell,
-        DataHeaderCellFilter
-    },
-    props: {
-        selectableRows: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        selectableRowsCheckboxes: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        header: {
-            type: Array,
-            required: true
-        },
-        actionsOnLeft: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        actions: {
-            type: Boolean,
-            required: false,
-            default: true
-        },
-        sort: {
-            type: String,
-            required: false
-        },
-        sortDirection: {
-            type: String,
-            required: false
-        },
-        filter: {
-            type: Object,
-            required: false
-        },
-        i18n: {
-            type: Object,
-            required: true
-        }
-    },
-    methods: {
-        onFilter (data) {
-            this.$emit('filter', data)
-        },
-        onSort (data) {
-            this.$emit('sort', data)
-        }
-    }
+const $emit = defineEmits(['filter', 'sort'])
+
+function onFilter (data: Record<string, string>): void {
+    $emit('filter', data)
+}
+
+function onSort (data: string): void {
+    $emit('sort', data)
 }
 </script>

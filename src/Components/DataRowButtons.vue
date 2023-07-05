@@ -18,116 +18,77 @@
         <div class="whitespace-nowrap text-center" v-else>
             <p class="mb-0">{{confirm.confirmText}}</p>
             <p class="whitespace-nowrap mb-0">
-                <b-button
+                <BButton
                     size="sm"
                     variant="primary"
                     @click.prevent="onConfirm"
                     class="me-1"
                 >
                     {{i18n.buttonConfirmOk}}
-                </b-button>
-                <b-button
+                </BButton>
+                <BButton
                     size="sm"
                     variant="danger"
                     class="me-1"
                     @click.prevent="onCancel"
                 >
                     {{i18n.buttonConfirmCancel}}
-                </b-button>
+                </BButton>
             </p>
         </div>
     </td>
 </template>
 
-<script>
-export default {
-    name: 'DataRowButtons',
-    props: {
-        actionsOnLeft: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        row: {
-            type: Object,
-            required: true
-        },
-        buttons: {
-            type: Array,
-            required: false,
-            default () {
-                return []
-            }
-        },
-        i18n: {
-            type: Object,
-            required: true
-        },
-        disableButtons: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        runningActions: {
-            type: Array,
-            required: false,
-            default: () => []
-        }
-    },
-    data () {
-        return {
-            confirm: null,
-            eventIds: []
-        }
-    },
-    computed: {
-        buttonsList () {
-            return this.buttons.filter((item) => {
-                return (typeof item.visibleIf === 'function') ? item.visibleIf(this.row) : true
-            }).map((item) => {
-                /*
-                const newItem = {
-                    ...item,
-                    disabled: this.disableButtons === true,
-                    actionRunning: false
-                }
-                if (item.watchProcessing) {
-                    @todo
-                }
+<script setup lang="ts">
+import { ActionButtonDefinition, ProcessedRowData } from '../interfaces'
+import { ref, computed } from 'vue'
 
-                watchProcessing: true,
-                disableOnProcessing: true,
-                visibleIf (row) {
-                    return !row.active
-                }
-                */
+const props = withDefaults(defineProps<{
+    actionsOnLeft?: boolean
+    row: ProcessedRowData
+    buttons: ActionButtonDefinition[]
+    i18n: Record<string, string>
+    disableButtons: boolean
+    runningActions: string[]
+}>(), {
+    actionsOnLeft: false,
+    buttons: () => [],
+    disableButtons: false,
+    runningActions: () => []
+})
 
-                return item
-            })
-        }
-    },
-    methods: {
-        onConfirm () {
-            this.emitButtonAction(this.confirm)
-            this.onCancel()
-        },
-        onCancel () {
-            this.confirm = null
-        },
-        onButtonClick (button) {
-            if (button.confirm) {
-                this.confirm = button
-            } else {
-                this.emitButtonAction(button)
-            }
-        },
-        emitButtonAction (button) {
-            this.$emit('action', {
-                eventId: `${button.event}-${(new Date()).valueOf()}`,
-                event: button.event,
-                row: this.row.row
-            })
-        }
+const $emit = defineEmits(['action'])
+
+const confirm = ref<any>(null)
+
+const buttonsList = computed(() => {
+    return props.buttons.filter((item) => {
+        return (typeof item.visibleIf === 'function') ? item.visibleIf(props.row) : true
+    })
+})
+
+function onConfirm (): void {
+    emitButtonAction(confirm)
+    onCancel()
+}
+
+function onCancel (): void {
+    confirm.value = null
+}
+
+function onButtonClick (button: any): void {
+    if (button.confirm) {
+        confirm.value = button
+    } else {
+        emitButtonAction(button)
     }
+}
+
+function emitButtonAction (button) {
+    $emit('action', {
+        eventId: `${button.event}-${(new Date()).valueOf()}`,
+        event: button.event,
+        row: props.row.row
+    })
 }
 </script>

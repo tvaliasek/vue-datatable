@@ -4,8 +4,5 @@
     </svg>
 </template>
 
-<script>
-export default {
-    name: 'bsIconPause'
-}
+<script setup lang="ts">
 </script>

@@ -5,13 +5,35 @@ import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
+import dts from 'vite-plugin-dts'
+import typescript2 from 'rollup-plugin-typescript2'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
+        dts({
+            insertTypesEntry: true,
+        }),
         Components({
-            resolvers: [BootstrapVueNextResolver()]
+            resolvers: [BootstrapVueNextResolver()],
+            dts: true
+        }),
+        typescript2({
+          check: false,
+          include: [
+            "src/Components/**/*.vue",
+            "src/DataTable.vue",
+          ],
+          tsconfigOverride: {
+            compilerOptions: {
+              outDir: "dist",
+              sourceMap: true,
+              declaration: true,
+              declarationMap: true,
+            }
+          },
+          exclude: ["vite.config.ts"]
         })
     ],
     resolve: {
@@ -21,7 +43,7 @@ export default defineConfig({
     },
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/lib-main.js'),
+            entry: resolve(__dirname, 'src/index.ts'),
             name: 'DataTable',
             fileName: 'data-table'
         },
@@ -29,9 +51,7 @@ export default defineConfig({
             external: [
                 'vue',
                 'bootstrap',
-                'bootstrap-vue-next',
-                'vue',
-                'vuelidate'
+                { 'bootstrap-vue-next': 'bootstrap-vue-next' }
             ],
             output: {
                 globals: {

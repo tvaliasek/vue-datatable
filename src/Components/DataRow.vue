@@ -6,7 +6,7 @@
                 <label class="custom-control-label" :for="`${tableUniqueKey}_rowCheckbox-${rowIndex}`"></label>
             </div>
         </td>
-        <data-row-buttons
+        <DataRowButtons
             v-if="actions && actionsOnLeft"
             :actions-on-left="actionsOnLeft"
             :row="row"
@@ -28,7 +28,7 @@
         >
             {{ item.content }}
         </component>
-        <data-row-buttons
+        <DataRowButtons
             v-if="actions && !actionsOnLeft"
             :actions-on-left="actionsOnLeft"
             :row="row"
@@ -41,116 +41,69 @@
     </tr>
 </template>
 
-<script>
+<script setup lang="ts">
 import DataRowButtons from './DataRowButtons.vue'
+import { ProcessedRowData, ActionButtonDefinition, ColumnDefinition } from '../interfaces'
+import { computed } from 'vue'
 
-export default {
-    name: 'DataRow',
-    components: {
-        DataRowButtons
+const props = withDefaults(defineProps<{
+    actionsOnLeft?: boolean
+    header: ColumnDefinition[]
+    row: ProcessedRowData
+    actions?: boolean
+    buttons?: ActionButtonDefinition[]
+    i18n: Record<string, string>
+    disableButtons?: boolean
+    filter?: Record<string, string>
+    runningActions?: string[]
+    selectableRows?: boolean
+    selectableRowsCheckboxes?: boolean
+    selectableRowsTrackBy?: string
+    selectableRowsClass?: string
+    rowIndex: number
+    tableUniqueKey: string
+}>(), {
+    actionsOnLeft: false,
+    actions: true,
+    buttons: () => [],
+    disableButtons: false,
+    runningActions: () => [],
+    selectableRows: false,
+    selectableRowsCheckboxes: false,
+    selectableRowsTrackBy: 'id',
+    selectableRowsClass: 'vue-datatable-selected-row'
+})
+
+const $emit = defineEmits(['action', 'rowSelectToggle'])
+
+const selected = computed(() => {
+    return props.row.isSelected === true
+})
+
+const selectedModel = computed({
+    get () {
+        return selected.value
     },
-    props: {
-        actionsOnLeft: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        header: {
-            type: Array,
-            required: true
-        },
-        row: {
-            type: Object,
-            required: true
-        },
-        actions: {
-            type: Boolean,
-            required: false,
-            default: true
-        },
-        buttons: {
-            type: Array,
-            required: false,
-            default () {
-                return []
-            }
-        },
-        i18n: {
-            type: Object,
-            required: true
-        },
-        disableButtons: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        filter: {
-            type: Object,
-            required: false
-        },
-        runningActions: {
-            type: Array,
-            required: false,
-            default: () => []
-        },
-        selectableRows: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        selectableRowsCheckboxes: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        selectableRowsTrackBy: {
-            type: String,
-            required: false,
-            default: 'id'
-        },
-        selectableRowsClass: {
-            type: String,
-            required: false,
-            default: 'vue-datatable-selected-row'
-        },
-        rowIndex: {
-            type: Number,
-            required: true
-        },
-        tableUniqueKey: {
-            type: String,
-            required: true
-        }
-    },
-    computed: {
-        selected () {
-            return this.row.isSelected === true
-        },
-        selectedModel: {
-            get () {
-                return this.selected
-            },
-            set (value) {
-                this.$emit('rowSelectToggle', this.row.row)
-            }
-        },
-        rowClassnames () {
-            const classnames = { 'highlight-row': true }
-            if (this.selectableRows && this.selected) {
-                classnames[`${this.selectableRowsClass}`] = true
-            }
-            return classnames
-        }
-    },
-    methods: {
-        onAction (data) {
-            this.$emit('action', data)
-        },
-        onCellClick (item) {
-            if (item.clickToSelect && this.selectableRows && !this.selectableRowsCheckboxes) {
-                this.selectedModel = !this.selectedModel
-            }
-        }
+    set (value) {
+        $emit('rowSelectToggle', props.row.row)
+    }
+})
+
+const rowClassnames = computed(() => {
+    const classnames = { 'highlight-row': true }
+    if (props.selectableRows && selected.value) {
+        classnames[`${props.selectableRowsClass}`] = true
+    }
+    return classnames
+})
+
+function onAction (data: { event: string, row: Record<string, any>}): void {
+    $emit('action', data)
+}
+
+function onCellClick (item: ColumnDefinition): void {
+    if (item.clickToSelect && props.selectableRows && !props.selectableRowsCheckboxes) {
+        selectedModel.value = !selectedModel.value
     }
 }
 </script>

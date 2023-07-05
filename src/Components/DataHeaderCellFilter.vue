@@ -1,60 +1,47 @@
 <template>
-    <b-form-input
+    <BFormInput
         size="sm"
         v-model="localFilterValue"
         :placeholder="i18n.search"
     />
 </template>
 
-<script>
-export default {
-    name: 'DataHeaderCellFilter',
-    props: {
-        i18n: {
-            type: Object,
-            required: true
-        },
-        dataField: {
-            type: String,
-            required: true
-        },
-        filter: {
-            type: Object,
-            required: false
+<script setup lang="ts">
+import { onBeforeUnmount, watch, computed, ref } from 'vue'
+
+const props = defineProps<{
+    i18n: Record<string, string>
+    dataField: string
+    filter: Record<string, string>
+}>()
+
+const $emit = defineEmits(['filter'])
+
+const tm = ref<any>(null)
+const localFilterValue = ref<string>(((props.filter.hasOwnProperty(props.dataField)) ? (props.filter[props.dataField] ?? '') : ''))
+
+const filterValue = computed({
+    get () {
+        if (props.filter.hasOwnProperty(props.dataField)) {
+            return props.filter[props.dataField] ?? ''
         }
+        return ''
     },
-    data () {
-        return {
-            tm: null,
-            localFilterValue: ((this.filter.hasOwnProperty(this.dataField)) ? (this.filter[this.dataField] || '') : '')
-        }
-    },
-    computed: {
-        filterValue: {
-            get () {
-                if (this.filter.hasOwnProperty(this.dataField)) {
-                    return this.filter[this.dataField] || ''
-                }
-                return ''
-            },
-            set (value) {
-                const filter = JSON.parse(JSON.stringify(this.filter))
-                filter[this.dataField] = `${value}`
-                this.$emit('filter', filter)
-            }
-        }
-    },
-    watch: {
-        localFilterValue (newValue) {
-            const value = `${newValue}`
-            window.clearTimeout(this.tm)
-            window.setTimeout(() => {
-                this.filterValue = value
-            }, 500)
-        }
-    },
-    beforeUnmount () {
-        window.clearTimeout(this.tm)
+    set (value: string) {
+        const filter = JSON.parse(JSON.stringify(props.filter))
+        filter[props.dataField] = `${value}`
+        $emit('filter', filter)
     }
-}
+})
+
+watch(localFilterValue, (newValue) => {
+        const value = `${newValue}`
+        window.clearTimeout(tm.value)
+        window.setTimeout(() => {
+            filterValue.value = value
+        }, 500)
+    }
+)
+
+onBeforeUnmount (() => { window.clearTimeout(tm.value) })
 </script>

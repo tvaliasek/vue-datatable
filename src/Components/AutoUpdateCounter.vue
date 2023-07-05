@@ -1,69 +1,57 @@
 <template>
-    <b-button
+    <BButton
         size="sm"
         :variant="(running) ? 'success' : 'primary'"
         @click.prevent="onClick"
     >
-        <bs-icon-arrow-repeat v-show="!running" />
-        <bs-icon-pause v-show="running" />
+        <BsIconArrowRepeat v-show="!running" />
+        <BsIconPause v-show="running" />
         {{ text }}
-    </b-button>
+    </BButton>
 </template>
 
-<script>
-import bsIconArrowRepeat from '../Icons/bsIconArrowRepeat.vue'
-import bsIconPause from '../Icons/bsIconPause.vue'
+<script setup lang="ts">
+import { onBeforeUnmount, computed, ref } from 'vue'
+import BsIconArrowRepeat from '../Icons/bsIconArrowRepeat.vue'
+import BsIconPause from '../Icons/bsIconPause.vue'
 
-export default {
-    name: 'AutoUpdateCounter',
-    components: {
-        bsIconArrowRepeat,
-        bsIconPause
-    },
-    data () {
-        return {
-            tm: null,
-            running: false,
-            counter: this.autoUpdateLimit
-        }
-    },
-    props: {
-        i18n: {
-            type: Object,
-            required: true
-        },
-        autoUpdateLimit: {
-            type: Number,
-            required: false,
-            default: 30
-        }
-    },
-    computed: {
-        text () {
-            return (this.running) ? `${this.i18n.autorefreshAfter} ${this.counter}s` : this.i18n.autorefresh
-        }
-    },
-    methods: {
-        onClick () {
-            clearInterval(this.tm)
-            this.counter = this.autoUpdateLimit
-            if (this.running) {
-                this.running = false
-            } else {
-                this.running = true
-                this.tm = setInterval(this.decrement, 1000)
-            }
-        },
-        decrement () {
-            this.counter--
-            if (this.counter <= 0) {
-                this.$emit('refresh')
-                this.counter = this.autoUpdateLimit
-            }
-        }
-    },
-    beforeUnmount () {
-        clearInterval(this.tm)
+const props = withDefaults(defineProps<{
+    i18n: Record<string, string>,
+    autoUpdateLimit?: number
+}>(), {
+    autoUpdateLimit: 30
+})
+
+const $emit = defineEmits(['refresh'])
+
+const tm = ref<any>(undefined)
+const running = ref(false)
+const counter = ref<number>(props.autoUpdateLimit)
+
+const text = computed(() => {
+    return (running.value) ? `${props.i18n.autorefreshAfter} ${counter.value}s` : props.i18n.autorefresh
+})
+
+function onClick (): void {
+    clearInterval(tm.value)
+    counter.value = props.autoUpdateLimit
+    if (running.value) {
+        running.value = false
+    } else {
+        running.value = true
+        tm.value = setInterval(() => decrement(), 1000)
     }
 }
+
+function decrement (): void {
+    counter.value--
+    if (counter.value <= 0) {
+        $emit('refresh')
+        counter.value = props.autoUpdateLimit
+    }
+}
+
+onBeforeUnmount (() => {
+    clearInterval(tm.value)
+})
 </script>

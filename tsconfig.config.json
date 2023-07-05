@@ -1,0 +1,16 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.json",
+    "include": [
+        "vite.config.*",
+        "vitest.config.*",
+        ".eslintrc.cjs"
+    ],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "types": [
+            "node",
+            "unplugin-icons/types/vue"
+        ]
+    }
+}

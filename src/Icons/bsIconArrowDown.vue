@@ -4,8 +4,5 @@
     </svg>
 </template>
 
-<script>
-export default {
-    name: 'bsIconArrowDown'
-}
+<script setup lang="ts">
 </script>
