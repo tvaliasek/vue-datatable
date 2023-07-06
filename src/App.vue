@@ -111,6 +111,7 @@ export default {
                     },
                     aggregateText: 'Total: ',
                     aggregate (accumulator, currentValue, index, array) {
+                        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                         return accumulator + (Array.isArray(currentValue.congress_numbers) ? currentValue.congress_numbers.length : 0)
                     },
                     aggregateInitialValue: 0
@@ -123,6 +124,13 @@ export default {
                     event: 'detail',
                     variant: 'primary',
                     text: 'Detail'
+                },
+                {
+                    event: 'confirm',
+                    variant: 'danger',
+                    text: 'Delete',
+                    confirm: true,
+                    confirmText: 'Are you sure?'
                 },
                 {
                     customComponent () {

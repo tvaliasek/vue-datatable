@@ -1,6 +1,6 @@
 {
   "name": "@tvaliasek/vue-datatable",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "private": false,
   "files": [
     "src",
@@ -13,16 +13,6 @@
     "!dist/index.html",
     "!dist/favicon.ico"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/data-table.mjs",
-      "require": "./dist/data-table.umd.js"
-    },
-    "./dist/data-table.css": {
-      "import": "./dist/data-table.css",
-      "require": "./dist/data-table.css"
-    }
-  },
   "types": "./dist/index.d.ts",
   "main": "dist/data-table.umd.js",
   "module": "dist/data-table.mjs",

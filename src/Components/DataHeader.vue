@@ -40,10 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { ColumnDefinition } from '@/interfaces';
+import type { ColumnDefinition } from '@/interfaces'
 import DataHeaderCell from './DataHeaderCell.vue'
 import DataHeaderCellFilter from './DataHeaderCellFilter.vue'
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
     selectableRows: boolean
     selectableRowsCheckboxes: boolean
     header: ColumnDefinition[]

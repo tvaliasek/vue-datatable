@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import DataRowButtons from './DataRowButtons.vue'
-import { ProcessedRowData, ActionButtonDefinition, ColumnDefinition } from '../interfaces'
+import type { ProcessedRowData, ActionButtonDefinition, ColumnDefinition, ProcessedCell } from '../interfaces'
 import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
@@ -77,7 +77,7 @@ const props = withDefaults(defineProps<{
 const $emit = defineEmits(['action', 'rowSelectToggle'])
 
 const selected = computed(() => {
-    return props.row.isSelected === true
+    return props.row.isSelected
 })
 
 const selectedModel = computed({
@@ -90,7 +90,7 @@ const selectedModel = computed({
 })
 
 const rowClassnames = computed(() => {
-    const classnames = { 'highlight-row': true }
+    const classnames: Record<string, boolean> = { 'highlight-row': true }
     if (props.selectableRows && selected.value) {
         classnames[`${props.selectableRowsClass}`] = true
     }
@@ -101,8 +101,8 @@ function onAction (data: { event: string, row: Record<string, any>}): void {
     $emit('action', data)
 }
 
-function onCellClick (item: ColumnDefinition): void {
-    if (item.clickToSelect && props.selectableRows && !props.selectableRowsCheckboxes) {
+function onCellClick (item: ProcessedCell): void {
+    if (item.clickToSelect === true && props.selectableRows && !props.selectableRowsCheckboxes) {
         selectedModel.value = !selectedModel.value
     }
 }

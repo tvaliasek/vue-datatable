@@ -270,7 +270,7 @@ const selectedRowIds = computed(() => {
 })
 
 const responsiveClass = computed(() => {
-    if (props.responsive) {
+    if (props.responsive !== undefined) {
         return (props.responsive === true) ? 'table-responsive' : `table-responsive-${props.responsive}`
     }
     return null
@@ -287,7 +287,7 @@ const i18nStrings = computed(() => {
 const sortFunctions = computed(() => {
     const tmp: Record<string, (a: any, b: any) => number> = {}
     for (const cell of props.header) {
-        if (cell.sortFn) {
+        if (typeof cell.sortFn === 'function') {
             tmp[cell.data] = cell.sortFn
         }
     }
@@ -297,7 +297,7 @@ const sortFunctions = computed(() => {
 const filterFunctions = computed(() => {
     const tmp: Record<string, (...args: any[]) => boolean> = {}
     for (const cell of props.header) {
-        if (cell.filterFn) {
+        if (typeof cell.filterFn === 'function') {
             tmp[cell.data] = cell.filterFn
         }
     }
@@ -307,7 +307,7 @@ const filterFunctions = computed(() => {
 const formatFunctions = computed(() => {
     const tmp: Record<string, (...args: any[]) => any> = {}
     for (const cell of props.header) {
-        if (cell.format) {
+        if (typeof cell.format === 'function') {
             tmp[cell.data] = cell.format
         }
     }
@@ -317,7 +317,7 @@ const formatFunctions = computed(() => {
 const aggregateFunctions = computed(() => {
     const tmp: Record<string, (...args: any[]) => any> = {}
     for (const cell of props.header) {
-        if (cell.aggregate) {
+        if (typeof cell.aggregate === 'function') {
             tmp[cell.data] = cell.aggregate
         }
     }
@@ -400,7 +400,7 @@ const processedData = computed(() => {
     return processData(pagedData.value)
 })
 
-onBeforeMount (() => {
+onBeforeMount(() => {
     if (props.stateSaving && props.stateSavingUniqueKey) {
         const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
         if (state && state[props.stateSavingUniqueKey]) {
@@ -433,7 +433,7 @@ function onSaveState () {
 }
 
 const _refreshTm = ref<any>(undefined)
-function onRemoteDataRefresh () {
+function onRemoteDataRefresh (): void {
     clearTimeout(_refreshTm.value)
     _refreshTm.value = setTimeout(() => {
         $emit(
@@ -449,7 +449,7 @@ function onRemoteDataRefresh () {
     }, 250)
 }
 
-function onExport () {
+function onExport (): void {
     const header: Record<string, string> = {}
     for (const entry of props.header) {
         header[entry.data] = entry.text
@@ -501,9 +501,9 @@ function sortData (filteredData: Array<Record<string, any>>) {
         const sortFn = sortFunctions.value[sortBy.value] ?? naturalSort
         if (sortFn !== null) {
             return ((sortDirection.value === 'DESC')
-                // @ts-ignore
+                // @ts-expect-error
                 ? [...filteredData].sort((a, b) => sortFn(a[sortBy.value], b[sortBy.value]))
-                // @ts-ignore
+                // @ts-expect-error
                 : [...filteredData].sort((a, b) => sortFn(b[sortBy.value], a[sortBy.value])))
         }
     }
@@ -557,7 +557,7 @@ function onFilter (value: Record<string, any>): void {
 
 function onAction (value: { event: string, row: Record<string, any> }): void {
     $emit('action', value)
-    // @ts-ignore
+    // @ts-expect-error
     $emit(value.event, value.row)
 }
 </script>

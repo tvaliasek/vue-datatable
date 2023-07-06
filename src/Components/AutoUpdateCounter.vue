@@ -16,7 +16,7 @@ import BsIconArrowRepeat from '../Icons/bsIconArrowRepeat.vue'
 import BsIconPause from '../Icons/bsIconPause.vue'
 
 const props = withDefaults(defineProps<{
-    i18n: Record<string, string>,
+    i18n: Record<string, string>
     autoUpdateLimit?: number
 }>(), {
     autoUpdateLimit: 30
@@ -51,7 +51,7 @@ function decrement (): void {
     }
 }
 
-onBeforeUnmount (() => {
+onBeforeUnmount(() => {
     clearInterval(tm.value)
 })
 </script>

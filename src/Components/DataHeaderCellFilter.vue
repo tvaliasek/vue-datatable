@@ -35,13 +35,13 @@ const filterValue = computed({
 })
 
 watch(localFilterValue, (newValue) => {
-        const value = `${newValue}`
-        window.clearTimeout(tm.value)
-        window.setTimeout(() => {
-            filterValue.value = value
-        }, 500)
-    }
+    const value = `${newValue}`
+    window.clearTimeout(tm.value)
+    window.setTimeout(() => {
+        filterValue.value = value
+    }, 500)
+}
 )
 
-onBeforeUnmount (() => { window.clearTimeout(tm.value) })
+onBeforeUnmount(() => { window.clearTimeout(tm.value) })
 </script>

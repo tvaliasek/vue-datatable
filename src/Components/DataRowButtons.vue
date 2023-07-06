@@ -3,7 +3,7 @@
         <div v-if="confirm === null">
             <component
                 v-for="(button, index) in buttonsList"
-                :is="(button.customComponent !== undefined) ? button.customComponent() : 'b-button'"
+                :is="(button.customComponent !== undefined) ? ((typeof button.customComponent === 'string') ? button.customComponent : button.customComponent()) : 'BButton'"
                 :row="(button.customComponent !== undefined) ? row : undefined"
                 :key="`button-${index}${button.event}`"
                 :size="(button.customComponent !== undefined) ? undefined : 'sm'"
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ActionButtonDefinition, ProcessedRowData } from '../interfaces'
+import type { ActionButtonDefinition, ProcessedRowData } from '../interfaces'
 import { ref, computed } from 'vue'
 
 const props = withDefaults(defineProps<{
@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<{
 
 const $emit = defineEmits(['action'])
 
-const confirm = ref<any>(null)
+const confirm = ref<ActionButtonDefinition | null>(null)
 
 const buttonsList = computed(() => {
     return props.buttons.filter((item) => {
@@ -68,7 +68,10 @@ const buttonsList = computed(() => {
 })
 
 function onConfirm (): void {
-    emitButtonAction(confirm)
+    if (confirm.value === null) {
+        return
+    }
+    emitButtonAction(confirm.value)
     onCancel()
 }
 
@@ -76,15 +79,15 @@ function onCancel (): void {
     confirm.value = null
 }
 
-function onButtonClick (button: any): void {
-    if (button.confirm) {
+function onButtonClick (button: ActionButtonDefinition): void {
+    if (button?.confirm === true) {
         confirm.value = button
     } else {
         emitButtonAction(button)
     }
 }
 
-function emitButtonAction (button) {
+function emitButtonAction (button: ActionButtonDefinition): void {
     $emit('action', {
         eventId: `${button.event}-${(new Date()).valueOf()}`,
         event: button.event,
