@@ -7,6 +7,9 @@
             <BNavItem :to="{ name: 'ExampleHome' }">
                 Complex
             </BNavItem>
+            <BNavItem :to="{ name: 'ExampleCustomButtons' }">
+                Custom buttons
+            </BNavItem>
         </BNavbarNav>
     </BNavbar>
     <RouterView />

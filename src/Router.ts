@@ -6,6 +6,11 @@ export default createRouter({
             path: '/',
             name: 'ExampleHome',
             component: async () => await import('@/Examples/Complex/App.vue')
+        },
+        {
+            path: '/custom-buttons',
+            name: 'ExampleCustomButtons',
+            component: async () => await import('@/Examples/CustomButtons/App.vue')
         }
     ]
 })
