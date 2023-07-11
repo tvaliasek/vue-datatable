@@ -10,6 +10,7 @@
                 :class="(button.customComponent !== undefined) ? undefined : 'me-1'"
                 :variant="(button.customComponent !== undefined) ? undefined : button.variant"
                 @click.prevent="(button.customComponent !== undefined) ? undefined : onButtonClick(button)"
+                @action="onAction"
                 :disabled="disableButtons"
             >
                 {{ button.text }}
@@ -85,6 +86,10 @@ function onButtonClick (button: ActionButtonDefinition): void {
     } else {
         emitButtonAction(button)
     }
+}
+
+function onAction (data: { event: string, row: Record<string, any> }): void {
+    $emit('action', data)
 }
 
 function emitButtonAction (button: ActionButtonDefinition): void {
