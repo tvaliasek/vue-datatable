@@ -48,8 +48,8 @@
 
 <script>
 import axios from 'axios'
-import CustomButton from './CustomButton.vue'
-import CustomCell from './CustomCell.vue'
+import CustomButton from './Components/CustomButton.vue'
+import CustomCell from './Components/CustomCell.vue'
 const DATASET_URL = 'https://www.govtrack.us/api/v2/role?current=true&role_type=senator'
 
 export default {

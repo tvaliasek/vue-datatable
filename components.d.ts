@@ -11,6 +11,11 @@ declare module 'vue' {
     BDropdown: typeof import('bootstrap-vue-next')['BDropdown']
     BDropdownItem: typeof import('bootstrap-vue-next')['BDropdownItem']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
+    BNav: typeof import('bootstrap-vue-next')['BNav']
+    BNavbar: typeof import('bootstrap-vue-next')['BNavbar']
+    BNavbarBrand: typeof import('bootstrap-vue-next')['BNavbarBrand']
+    BNavbarNav: typeof import('bootstrap-vue-next')['BNavbarNav']
+    BNavItem: typeof import('bootstrap-vue-next')['BNavItem']
     BPagination: typeof import('bootstrap-vue-next')['BPagination']
     BSpinner: typeof import('bootstrap-vue-next')['BSpinner']
   }
