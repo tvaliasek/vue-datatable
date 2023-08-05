@@ -23,12 +23,15 @@
                     :filter="filter"
                     :sort="sortBy"
                     :sort-direction="sortDirection"
-                    @filter="onFilter"
-                    @sort="onSort"
                     :i18n="i18nStrings"
                     :actions-on-left="actionsOnLeft"
                     :selectable-rows="selectableRows"
                     :selectable-rows-checkboxes="selectableRowsCheckboxes"
+                    :selected-count="selectedRows.length"
+                    @filter="onFilter"
+                    @sort="onSort"
+                    @select-all="onSelectAll"
+                    @select-none="onSelectNone"
                 />
                 <tbody v-if="loading || data.length === 0">
                     <slot name="firstRow"></slot>
@@ -414,8 +417,16 @@ onBeforeMount(() => {
     }
 })
 
-function onSaveState () {
-    nextTick(() => {
+function onSelectAll (): void {
+    selectedRows.value = filteredData.value.map(item => flat.unflatten(item, { safe: true }))
+}
+
+function onSelectNone (): void {
+    selectedRows.value = []
+}
+
+function onSaveState (): void {
+    void nextTick(() => {
         if (props.stateSaving && props.stateSavingUniqueKey) {
             const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
             if (state) {
@@ -429,7 +440,7 @@ function onSaveState () {
             }
             sessionStorage.setItem('_vueDataTableStates', JSON.stringify(state))
         }
-    }).catch(() => {})
+    })
 }
 
 const _refreshTm = ref<any>(undefined)

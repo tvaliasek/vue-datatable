@@ -3,7 +3,6 @@
         <td v-if="selectableRows && selectableRowsCheckboxes" class="vue-datatable-vertical-align-middle">
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" :id="`${tableUniqueKey}_rowCheckbox-${rowIndex}`" v-model="selectedModel">
-                <label class="custom-control-label" :for="`${tableUniqueKey}_rowCheckbox-${rowIndex}`"></label>
             </div>
         </td>
         <DataRowButtons

@@ -1,7 +1,14 @@
 <template>
     <thead class="__datatable-header">
         <tr>
-            <th v-if="selectableRows && selectableRowsCheckboxes"></th>
+            <th v-if="selectableRows && selectableRowsCheckboxes" class="vue-datatable-vertical-align-middle">
+                <div class="custom-control custom-checkbox">
+                    <label class="d-flex align-items-center align-content-center gap-1">
+                        <input type="checkbox" class="custom-control-input" v-model="selectAllState">
+                        <span>{{ selectedCount }}</span>
+                    </label>
+                </div>
+            </th>
             <th v-if="actions && actionsOnLeft"></th>
             <DataHeaderCell
                 v-for="(cell, index) in header"
@@ -43,6 +50,8 @@
 import type { ColumnDefinition } from '@/interfaces'
 import DataHeaderCell from './DataHeaderCell.vue'
 import DataHeaderCellFilter from './DataHeaderCellFilter.vue'
+import { computed, ref } from 'vue'
+
 withDefaults(defineProps<{
     selectableRows: boolean
     selectableRowsCheckboxes: boolean
@@ -53,16 +62,30 @@ withDefaults(defineProps<{
     sortDirection?: string | null
     filter?: Record<string, string>
     i18n: Record<string, string>
+    selectedCount?: number
 }>(), {
     selectableRows: false,
     selectableRowsCheckboxes: false,
     actionsOnLeft: false,
     sort: null,
     sortDirection: null,
-    filter: () => ({})
+    filter: () => ({}),
+    selectedCount: 0
 })
 
-const $emit = defineEmits(['filter', 'sort'])
+const selectAll = ref(false)
+
+const selectAllState = computed({
+    get () {
+        return selectAll.value
+    },
+    set (value) {
+        selectAll.value = value
+        $emit((selectAll.value) ? 'selectAll' : 'selectNone')
+    }
+})
+
+const $emit = defineEmits(['filter', 'sort', 'selectAll', 'selectNone'])
 
 function onFilter (data: Record<string, string>): void {
     $emit('filter', data)
