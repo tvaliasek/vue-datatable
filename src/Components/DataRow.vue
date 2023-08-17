@@ -15,18 +15,27 @@
             :running-actions="runningActions"
             @action="onAction"
         />
-        <component
+        <template
             v-for="(item, index) in row.cells"
             :key="`rw-${index}`"
-            :is="(item.customComponent) ? item.customComponent : 'td'"
-            :row="(item.customComponent) ? row.row : undefined"
-            :style="(item.cellStyle) ? item.cellStyle : undefined"
-            :class="(Array.isArray(item.cellClassnames)) ? item.cellClassnames.join(' ') : undefined"
-            @action="onAction"
-            @click="onCellClick(item)"
         >
-            {{ item.content }}
-        </component>
+            <component
+                v-if="item.customComponent"
+                :is="item.customComponent"
+                :row="row.row"
+                @action="onAction"
+                @click="onCellClick(item)"
+            />
+            <td
+                v-else
+                :style="(item.cellStyle) ? item.cellStyle : undefined"
+                :class="(Array.isArray(item.cellClassnames)) ? item.cellClassnames.join(' ') : undefined"
+                @action="onAction"
+                @click="onCellClick(item)"
+            >
+                {{ item.content }}
+            </td>
+        </template>
         <DataRowButtons
             v-if="actions && !actionsOnLeft"
             :actions-on-left="actionsOnLeft"

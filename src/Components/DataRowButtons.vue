@@ -1,20 +1,33 @@
 <template>
     <td :class="{ 'text-end': !actionsOnLeft, 'whitespace-nowrap __datatable-actions': true }">
         <div v-if="confirm === null">
-            <component
+            <template
                 v-for="(button, index) in buttonsList"
-                :is="(button.customComponent !== undefined) ? ((typeof button.customComponent === 'string') ? button.customComponent : button.customComponent()) : 'BButton'"
-                :row="(button.customComponent !== undefined) ? row : undefined"
                 :key="`button-${index}${button.event}`"
-                :size="(button.customComponent !== undefined) ? undefined : 'sm'"
-                :class="(button.customComponent !== undefined) ? undefined : 'me-1'"
-                :variant="(button.customComponent !== undefined) ? undefined : button.variant"
-                @click.prevent="(button.customComponent !== undefined) ? undefined : onButtonClick(button)"
-                @action="onAction"
-                :disabled="disableButtons"
             >
-                {{ button.text }}
-            </component>
+                <BButton
+                    v-if="button.customComponent === undefined"
+                    :size="'sm'"
+                    :class="'me-1'"
+                    :variant="button.variant"
+                    @click.prevent="onButtonClick(button)"
+                    :disabled="disableButtons"
+                >
+                    <template v-if="button.customTextComponent">
+                        <component
+                            :is="(typeof button.customTextComponent === 'function') ? button.customTextComponent() : button.customTextComponent"
+                            v-bind="button.customTextComponentProps ?? {}"
+                        />
+                    </template>
+                    <template v-if="button.text">{{ button.text }}</template>
+                </BButton>
+                <component
+                    v-else
+                    :is="typeof button.customComponent === 'string' ? button.customComponent : button.customComponent()"
+                    :row="row"
+                    @action="onAction"
+                />
+            </template>
         </div>
         <div class="whitespace-nowrap text-center" v-else>
             <p class="mb-0">{{confirm.confirmText}}</p>

@@ -85,11 +85,13 @@ Actions are defined as Array of objects, each action generates button and emits 
 | -------- | ---- | -------- | ------- |------ |
 | text | String | yes | undefined | Text displayed as caption of button |
 | event | String | yes | undefined | Name of emitted event |
-| variant | String | yes | undefined | Bootstrap variant of button ex: `'primary'`, `'danger'` |
+| variant | String | no | undefined | Bootstrap variant of button ex: `'primary'`, `'danger'` |
 | confirm | Boolean | no | false | Enable confirmation when button is clicked |
 | confirmText | String | no | undefined | Text to show on confirmation prompt |
 | customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row |
 | visibleIf | Function | no | undefined | Function which returns boolean to indicate if button should be visible, function will receive whole data row as first parameter |
+| customTextComponent | String or function | no | undefined | Custom component for default slot of button, can be combined with text | 
+| customTextComponentProps| Record<string, any> | no | undefined | Object with props which will be passed to customTextComponent |
 
 ### Events
 

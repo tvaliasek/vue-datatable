@@ -20,11 +20,13 @@ export interface ColumnDefinition {
 export interface ActionButtonDefinition {
     text: string
     event: string
-    variant: string
+    variant?: string
     confirm?: boolean
     confirmText?: string
     customComponent?: string | (() => Component)
     visibleIf?: (row: ProcessedRowData) => boolean
+    customTextComponent?: string | CallableFunction
+    customTextComponentProps?: Record<string, any>
 }
 
 export interface ProcessedCell {

@@ -50,9 +50,9 @@
 import type { ColumnDefinition } from '@/interfaces'
 import DataHeaderCell from './DataHeaderCell.vue'
 import DataHeaderCellFilter from './DataHeaderCellFilter.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
     selectableRows: boolean
     selectableRowsCheckboxes: boolean
     header: ColumnDefinition[]
@@ -82,6 +82,12 @@ const selectAllState = computed({
     set (value) {
         selectAll.value = value
         $emit((selectAll.value) ? 'selectAll' : 'selectNone')
+    }
+})
+
+watch(computed(() => props.selectedCount), (value) => {
+    if (value === 0) {
+        selectAllState.value = false
     }
 })
 
