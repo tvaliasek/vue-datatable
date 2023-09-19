@@ -1,5 +1,8 @@
 <template>
-    <td>Custom Cell: {{row.party}}</td>
+    <td>
+        Custom Cell: {{row.party}}
+        Header definition: {{ dataIndex }}
+    </td>
 </template>
 
 <script>
@@ -10,6 +13,10 @@ export default {
             type: Object,
             required: false,
             default: () => ({})
+        },
+        dataIndex: {
+            type: String,
+            required: false
         }
     }
 }
