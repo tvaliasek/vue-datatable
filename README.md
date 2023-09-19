@@ -8,16 +8,16 @@ npm install @tvaliasek/vue-datatable
 
 # peer dependencies
 npm install bootstrap
-npm install bootstrap-vue-3
+npm install bootstrap-vue-next
 ```
 
 ``` js
 import { createApp } from 'vue'
 import { DataTablePlugin } from '@tvaliasek/vue-datatable'
 
-import '@tvaliasek/vue-datatable/dist/data-table.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+import '@tvaliasek/vue-datatable/dist/data-table.css'
 
 const app = createApp(App)
 app.use(DataTablePlugin)
@@ -69,7 +69,7 @@ Columns are defined as Array of objects
 | format | Function | no | undefined | Custom cell data format function. ```(value) => value ``` |
 | sortFn | Function | no | undefined | Custom sort function ``` sort(a, b) ``` |
 | filterFn | Function | no | undefined | Custom filter function ``` filter(cellValue, filterValue, rowData) ``` |
-| customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row |
+| customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row and data key from header definition in prop named dataIndex |
 | cellStyle | String | no | undefined | CSS style rules to apply on column data cells |
 | cellClassnames | Array | no | [] | Array of css class names to apply on column data cells |
 | aggregate | Function | no | undefined | Array reducer function for aggregation of filtered and flattened data. Whole flattened row is obtained as reducer currentValue. [See Array.reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) |
