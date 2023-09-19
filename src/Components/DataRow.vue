@@ -23,6 +23,7 @@
                 v-if="item.customComponent"
                 :is="item.customComponent"
                 :row="row.row"
+                :data-index="item.index"
                 @action="onAction"
                 @click="onCellClick(item)"
             />
