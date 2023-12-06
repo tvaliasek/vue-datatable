@@ -70,6 +70,7 @@
                         @rowSelectToggle="onRowSelectToggle"
                         :row-index="index"
                         :table-unique-key="uniqueKey"
+                        :row-class="rowClass"
                     />
                     <tr v-if="Object.keys(aggregateFunctions).length > 0">
                         <td v-if="selectableRows && selectableRowsCheckboxes">
@@ -140,7 +141,7 @@ import LoadingIndicator from './Components/LoadingIndicator.vue'
 import AutoUpdateCounter from './Components/AutoUpdateCounter.vue'
 import langs from './Langs/index'
 import naturalSort from './Sorters/naturalSort'
-import flat from 'flat'
+import { flatten, unflatten } from 'flat'
 import { generateString } from './randomString'
 import { onBeforeMount, ref, computed, watch, toValue, nextTick } from 'vue'
 import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell } from './interfaces'
@@ -183,6 +184,7 @@ const props = withDefaults(
         tableClass?: string | null
         size?: string
         autoUpdateLimit?: number
+        rowClass?: string | ((row: Record<string, any>) => null | string)
     }>(),
     {
         remoteDataMode: false,
@@ -265,7 +267,7 @@ const selectedRows = computed({
 })
 
 const flattenedSelectedRows = computed(() => {
-    return props.modelValue.map(item => flat.flatten(item, { safe: true }))
+    return props.modelValue.map(item => flatten(item, { safe: true }))
 })
 
 const selectedRowIds = computed(() => {
@@ -347,7 +349,7 @@ const aggregateInitialValues = computed(() => {
 
 const flattenedData = computed(() => {
     return props.data.map((item) => {
-        return flat.flatten(item, { safe: true })
+        return flatten(item, { safe: true })
     })
 })
 
@@ -418,7 +420,7 @@ onBeforeMount(() => {
 })
 
 function onSelectAll (): void {
-    selectedRows.value = filteredData.value.map(item => flat.unflatten(item, { safe: true }))
+    selectedRows.value = filteredData.value.map(item => unflatten(item, { safe: true }))
 }
 
 function onSelectNone (): void {
@@ -481,7 +483,7 @@ function onExport (): void {
 function processData (pagedData: Array<Record<string, any>>): ProcessedRowData[] {
     return pagedData.map((row) => {
         return {
-            row: flat.unflatten(row, { safe: true }),
+            row: unflatten(row, { safe: true }),
             isSelected: (row[props.selectableRowsTrackBy] !== undefined) ? selectedRowIds.value.includes(row[props.selectableRowsTrackBy]) : false,
             cells: props.header.map((item) => {
                 if (row.hasOwnProperty(item.data)) {
@@ -522,9 +524,9 @@ function sortData (filteredData: Array<Record<string, any>>) {
 }
 
 function onRowSelectToggle (row: Record<string, any>) {
-    const flatRow = flat.flatten(row, { safe: true })
+    const flatRow = flatten(row, { safe: true })
     if (selectedRowIds.value.includes(flatRow[props.selectableRowsTrackBy])) {
-        selectedRows.value = selectedRows.value.filter((item) => flat.flatten(item, { safe: true })[props.selectableRowsTrackBy] !== flatRow[props.selectableRowsTrackBy])
+        selectedRows.value = selectedRows.value.filter((item) => flatten(item, { safe: true })[props.selectableRowsTrackBy] !== flatRow[props.selectableRowsTrackBy])
     } else {
         selectedRows.value = [...selectedRows.value, row]
     }

@@ -71,6 +71,7 @@ const props = withDefaults(defineProps<{
     selectableRowsClass?: string
     rowIndex: number
     tableUniqueKey: string
+    rowClass?: string | ((row: Record<string, any>) => null | string)
 }>(), {
     actionsOnLeft: false,
     actions: true,
@@ -102,6 +103,18 @@ const rowClassnames = computed(() => {
     const classnames: Record<string, boolean> = { 'highlight-row': true }
     if (props.selectableRows && selected.value) {
         classnames[`${props.selectableRowsClass}`] = true
+    }
+    if (typeof props.rowClass === 'string' && props.rowClass.length > 0) {
+        classnames[props.rowClass] = true
+    } else if (typeof props.rowClass === 'function') {
+        try {
+            const computedClass = props.rowClass(props.row.row)
+            if (typeof computedClass === 'string' && computedClass.length > 0) {
+                classnames[computedClass] = true
+            }
+        } catch (error) {
+            console.error('Error during execution of rowClass callback function', error)
+        }
     }
     return classnames
 })

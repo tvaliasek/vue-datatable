@@ -55,6 +55,7 @@ Define columns (header prop) and provide dataset as array of objects.
 | tableUniqueKey | String | no | generated from _uid | custom unique key for table |
 | remoteDataMode | Boolean | no | false | set to true to enable remote data mode |
 | remoteDataTotalRows | Number | no | 0 | required for pagination to work when remote data mode is enabled, total number of rows in remote dataset |
+| rowClass | String, Function | no | undefined | css class to apply on all rows, or callback (row: Record<string, any) => string or null |
 
 ### DataTable column definition
 

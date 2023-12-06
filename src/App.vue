@@ -42,6 +42,7 @@
             :state-saving="true"
             :state-saving-unique-key="'table'"
             @refresh="onRefresh"
+            :row-class="(row) => (row.party === 'Democrat') ? 'border-primary' : null"
         />
     </div>
 </template>

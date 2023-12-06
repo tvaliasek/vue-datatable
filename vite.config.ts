@@ -13,27 +13,27 @@ export default defineConfig({
     plugins: [
         vue(),
         dts({
-            insertTypesEntry: true,
+            insertTypesEntry: true
         }),
         Components({
             resolvers: [BootstrapVueNextResolver()],
             dts: true
         }),
         typescript2({
-          check: false,
-          include: [
-            "src/Components/**/*.vue",
-            "src/DataTable.vue",
-          ],
-          tsconfigOverride: {
-            compilerOptions: {
-              outDir: "dist",
-              sourceMap: true,
-              declaration: true,
-              declarationMap: true,
-            }
-          },
-          exclude: ["vite.config.ts"]
+            check: false,
+            include: [
+                'src/Components/**/*.vue',
+                'src/DataTable.vue'
+            ],
+            tsconfigOverride: {
+                compilerOptions: {
+                    outDir: 'dist',
+                    sourceMap: true,
+                    declaration: true,
+                    declarationMap: true
+                }
+            },
+            exclude: ['vite.config.ts']
         })
     ],
     resolve: {
