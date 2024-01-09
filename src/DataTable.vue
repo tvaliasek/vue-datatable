@@ -420,7 +420,7 @@ onBeforeMount(() => {
 })
 
 function onSelectAll (): void {
-    selectedRows.value = filteredData.value.map(item => unflatten(item, { safe: true }))
+    selectedRows.value = sortedData.value.map(item => unflatten(item, { safe: true }))
 }
 
 function onSelectNone (): void {
