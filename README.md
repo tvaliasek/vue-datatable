@@ -67,7 +67,7 @@ Columns are defined as Array of objects
 | data | String | yes | undefined | Name of property in row data object, for nested objects it should be in dot notation ex: ```'person.name'``` |
 | sortable | Boolean | no | false | Toggles sorting on column, data is by default sorted naturally |
 | filterable | Boolean | no | false | Toggles filtering on column |
-| format | Function | no | undefined | Custom cell data format function. ```(value) => value ``` |
+| format | Function | no | undefined | Custom cell data format function. ```(value, row) => value ``` |
 | sortFn | Function | no | undefined | Custom sort function ``` sort(a, b) ``` |
 | filterFn | Function | no | undefined | Custom filter function ``` filter(cellValue, filterValue, rowData) ``` |
 | customComponent | Function | no | undefined | Function which returns custom component instance or name, component will receive whole data row in prop named row and data key from header definition in prop named dataIndex |
