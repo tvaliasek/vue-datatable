@@ -135,6 +135,7 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable @typescript-eslint/restrict-template-expressions
 import DataHeader from './Components/DataHeader.vue'
 import DataRow from './Components/DataRow.vue'
 import LoadingIndicator from './Components/LoadingIndicator.vue'
@@ -373,7 +374,7 @@ const filteredData = computed(() => {
                 if (filterFunctions.value.hasOwnProperty(index) && typeof filterFunctions.value[index] === 'function') {
                     isVisible = isVisible && filterFunctions.value[index](`${row[index]}`, filter.value[index], row)
                 } else if (formatFunctions.value[index] && typeof formatFunctions.value[index] === 'function') {
-                    isVisible = isVisible && `${formatFunctions.value[index](row[index])}`.includes(filter.value[index])
+                    isVisible = isVisible && `${formatFunctions.value[index](row[index], row)}`.includes(filter.value[index])
                 } else {
                     isVisible = isVisible && `${row[index]}`.toLocaleLowerCase().includes(`${filter.value[index]}`.toLocaleLowerCase())
                 }
@@ -489,7 +490,7 @@ function processData (pagedData: Array<Record<string, any>>): ProcessedRowData[]
                 if (row.hasOwnProperty(item.data)) {
                     const data: ProcessedCell = { index: item.data, content: row[item.data], customComponent: (typeof item.customComponent === 'function') ? item.customComponent() : item.customComponent }
                     if (typeof item.format === 'function') {
-                        data.content = item.format(data.content)
+                        data.content = item.format(data.content, { ...row })
                     }
                     if (typeof item.cellStyle === 'function') {
                         data.cellStyle = item.cellStyle(data.index, data.content, { ...row })

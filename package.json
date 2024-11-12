@@ -1,6 +1,6 @@
 {
   "name": "@tvaliasek/vue-datatable",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": false,
   "files": [
     "src",

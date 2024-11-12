@@ -5,7 +5,7 @@ export interface ColumnDefinition {
     data: string
     sortable?: boolean
     filterable?: boolean
-    format?: (value: any) => any
+    format?: (value: any, row: Record<string, any>) => any
     sortFn?: (a: any, b: any) => number
     filterFn?: (cellValue: any, filterValue: string, rowData: ProcessedRowData) => boolean
     customComponent?: () => Component
