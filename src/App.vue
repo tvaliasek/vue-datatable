@@ -12,12 +12,12 @@
                 <pre class="p-4 bg-light font-weight-bold">{{JSON.stringify(detail, null, 4)}}</pre>
             </div>
             <div class="card-footer">
-                <b-button
-                    variant="primary"
+                <button
+                    class="btn btn-primary"
                     @click.prevent="detail = null"
                 >
                     Close
-                </b-button>
+                </button>
             </div>
         </div>
         <p>Selected rows: {{selected.length}}</p>
