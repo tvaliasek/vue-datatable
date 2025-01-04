@@ -1,15 +1,23 @@
 <template>
-    <td :class="{ 'text-end': !actionsOnLeft, 'whitespace-nowrap __datatable-actions': true }">
-        <div v-if="confirm === null">
+    <td class="whitespace-nowrap __datatable-actions">
+        <div
+            v-if="confirm === null"
+            class="d-flex gap-1 align-items-center align-content-center"
+            :class="props.actionsOnLeft ? 'justify-content-start' : 'justify-content-end'"
+        >
             <template
                 v-for="(button, index) in buttonsList"
-                :key="`button-${index}${button.event}`"
+                :key="`button-${index}${button?.event ?? ''}`"
             >
-                <BButton
-                    v-if="button.customComponent === undefined"
-                    :size="'sm'"
-                    :class="'me-1'"
-                    :variant="button.variant"
+                <button
+                    v-if="(!button?.customComponent && !button?.href && !button?.hrefCallback)"
+                    :class="[
+                        'btn btn-sm',
+                        `btn-${button.variant ?? 'primary'}`,
+                        {
+                            'btn-disabled': disableButtons || runningActions.includes(button.event)
+                        }
+                    ]"
                     @click.prevent="onButtonClick(button)"
                     :disabled="disableButtons"
                 >
@@ -20,35 +28,51 @@
                         />
                     </template>
                     <template v-if="button.text">{{ button.text }}</template>
-                </BButton>
+                </button>
+                <a
+                    v-if="(!button?.customComponent && (button?.href || button?.hrefCallback))"
+                    :class="[
+                        'btn btn-sm',
+                        `btn-${button.variant ?? 'primary'}`,
+                        {
+                            'btn-disabled': disableButtons || runningActions.includes(button.event)
+                        }
+                    ]"
+                    :href="(typeof button.hrefCallback === 'function') ? button.hrefCallback(row) : button.href"
+                    @click.prevent="onButtonClick(button)"
+                >
+                    <template v-if="button.customTextComponent">
+                        <component
+                            :is="(typeof button.customTextComponent === 'function') ? button.customTextComponent() : button.customTextComponent"
+                            v-bind="button.customTextComponentProps ?? {}"
+                        />
+                    </template>
+                    <template v-if="button.text">{{ button.text }}</template>
+                </a>
                 <component
-                    v-else
+                    v-if="button?.customComponent"
                     :is="typeof button.customComponent === 'string' ? button.customComponent : button.customComponent()"
                     :row="row"
                     @action="onAction"
                 />
             </template>
         </div>
-        <div class="whitespace-nowrap text-center" v-else>
-            <p class="mb-0">{{confirm.confirmText}}</p>
-            <p class="whitespace-nowrap mb-0">
-                <BButton
-                    size="sm"
-                    variant="primary"
+        <div class="d-flex flex-wrap flex-direction-column justify-content-center align-items-center align-content-center gap-2" v-else>
+            <p class="mb-0 w-100 text-center">{{confirm.confirmText}}</p>
+            <div class="d-flex justify-content-center align-content-center align-items-center flex-wrap gap-2">
+                <button
+                    class="btn btn-sm btn-primary"
                     @click.prevent="onConfirm"
-                    class="me-1"
                 >
                     {{i18n.buttonConfirmOk}}
-                </BButton>
-                <BButton
-                    size="sm"
-                    variant="danger"
-                    class="me-1"
+                </button>
+                <button
+                    class="btn btn-sm btn-danger"
                     @click.prevent="onCancel"
                 >
                     {{i18n.buttonConfirmCancel}}
-                </BButton>
-            </p>
+                </button>
+            </div>
         </div>
     </td>
 </template>
@@ -106,10 +130,23 @@ function onAction (data: { event: string, row: Record<string, any> }): void {
 }
 
 function emitButtonAction (button: ActionButtonDefinition): void {
-    $emit('action', {
-        eventId: `${button.event}-${(new Date()).valueOf()}`,
-        event: button.event,
-        row: props.row.row
-    })
+    if (typeof button.event === 'string') {
+        $emit('action', {
+            eventId: `${button.event}-${(new Date()).valueOf()}`,
+            event: button.event,
+            row: props.row.row
+        })
+    }
+
+    if (typeof button?.href === 'string') {
+        window.location = button.href
+    }
+
+    if (typeof button?.hrefCallback === 'function') {
+        const href = button.hrefCallback(props.row)
+        if (typeof href === 'string') {
+            window.location = href
+        }
+    }
 }
 </script>

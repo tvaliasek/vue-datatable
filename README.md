@@ -1,6 +1,6 @@
 # Simple Bootstrap 5 and Vue 3 data table
 
-Very naive and simple data table for Bootstrap 5 and Vue 3. For Vue 2 use version 1.x.
+Very naive and simple data table for Bootstrap 5 and Vue 3. For Vue 2 use version 1.x., now without the dependency on bootstrap-vue-next.
 
 ## Install
 ``` sh
@@ -8,7 +8,6 @@ npm install @tvaliasek/vue-datatable
 
 # peer dependencies
 npm install bootstrap
-npm install bootstrap-vue-next
 ```
 
 ``` js
@@ -16,7 +15,6 @@ import { createApp } from 'vue'
 import { DataTablePlugin } from '@tvaliasek/vue-datatable'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import '@tvaliasek/vue-datatable/dist/data-table.css'
 
 const app = createApp(App)
@@ -26,7 +24,7 @@ app.mount('#app')
 ```
 
 ## Usage
-Define columns (header prop) and provide dataset as array of objects.
+Define columns (header prop) and provide dataset as array of objects. See the example on ./src/App.vue
 
 ### DataTable component props
 
@@ -85,7 +83,7 @@ Actions are defined as Array of objects, each action generates button and emits 
 | property | type | required | default | usage |
 | -------- | ---- | -------- | ------- |------ |
 | text | String | yes | undefined | Text displayed as caption of button |
-| event | String | yes | undefined | Name of emitted event |
+| event | String | no | undefined | Name of emitted event |
 | variant | String | no | undefined | Bootstrap variant of button ex: `'primary'`, `'danger'` |
 | confirm | Boolean | no | false | Enable confirmation when button is clicked |
 | confirmText | String | no | undefined | Text to show on confirmation prompt |
@@ -93,6 +91,8 @@ Actions are defined as Array of objects, each action generates button and emits 
 | visibleIf | Function | no | undefined | Function which returns boolean to indicate if button should be visible, function will receive whole data row as first parameter |
 | customTextComponent | String or function | no | undefined | Custom component for default slot of button, can be combined with text | 
 | customTextComponentProps| Record<string, any> | no | undefined | Object with props which will be passed to customTextComponent |
+| href | String | no | undefined | pass string if the button should be a common link |
+| hrefCallback | Function | no | same as for href, but you can provide a factory function for link, function will receive whole processed row as a first parameter |
 
 ### Events
 

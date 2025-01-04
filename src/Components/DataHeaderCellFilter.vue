@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, watch, computed, ref } from 'vue'
+import BFormInput from './ui/BFormInput.vue'
 
 const props = defineProps<{
     i18n: Record<string, string>

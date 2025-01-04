@@ -1,15 +1,11 @@
 <template>
-    <span class="font-weight-bold me-2">{{row.row.description}}</span>
+    <span class="font-weight-bold me-2">{{row?.row?.description}}</span>
 </template>
 
-<script>
-export default {
-    name: 'CustomButton',
-    props: {
-        row: {
-            type: Object,
-            required: true
-        }
-    }
-}
+<script setup lang="ts">
+withDefaults(defineProps<{
+    row: any
+}>(), {
+    row: () => ({ row: {} })
+})
 </script>

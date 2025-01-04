@@ -19,7 +19,7 @@ export interface ColumnDefinition {
 
 export interface ActionButtonDefinition {
     text: string
-    event: string
+    event?: string
     variant?: string
     confirm?: boolean
     confirmText?: string
@@ -27,6 +27,8 @@ export interface ActionButtonDefinition {
     visibleIf?: (row: ProcessedRowData) => boolean
     customTextComponent?: string | CallableFunction
     customTextComponentProps?: Record<string, any>
+    href?: string
+    hrefCallback?: (row: ProcessedRowData) => string | undefined
 }
 
 export interface ProcessedCell {

@@ -1,8 +1,8 @@
 <template>
-    <p class="mb-0 alert alert-info text-center">
-        <BSpinner variant="primary" /><br/>
-        {{ i18n.loading }}
-    </p>
+    <div class="mb-0 alert alert-info gap-3 flex-wrap d-flex justify-content-center align-items-center align-content-center">
+        <div class="spinner-border text-primary"></div>
+        <span>{{ i18n.loading }}</span>
+    </div>
 </template>
 
 <script setup lang="ts">

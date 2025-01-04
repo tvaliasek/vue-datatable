@@ -89,22 +89,26 @@
                 </tbody>
             </table>
         </div>
+
         <slot name="afterTable"></slot>
-        <div class="d-flex justify-content-between flex-wrap my-1">
-            <div class="mb-1">
+
+        <div class="d-flex justify-content-between align-items-start align-content-start flex-wrap gap-2 my-2">
+            <div class="d-flex align-items-center align-content-center justify-content-start gap-2 flex-wrap">
                 <slot name="bottomLeft"></slot>
-                <BPagination
-                    v-if="paging"
-                    size="sm"
-                    v-model="currentPage"
-                    :total-rows="(props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.length"
-                    :per-page="currentPageLimit"
-                    :first-number="true"
-                    :last-number="((props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.length) > currentPageLimit"
-                />
+                <div>
+                    <BPagination
+                        v-if="paging"
+                        size="sm"
+                        v-model="currentPage"
+                        :total="(props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.length"
+                        :per-page="currentPageLimit"
+                    />
+                </div>
             </div>
-            <div class="mb-1 text-md-end">
+
+            <div class="d-flex align-items-center align-content-center justify-content-end gap-2 flex-wrap">
                 <slot name="bottomRight"></slot>
+
                 <BDropdown
                     v-if="paging"
                     variant="primary"
@@ -115,20 +119,18 @@
                         v-for="item in pagingOptions"
                         :key="`item-${item}`"
                         @click="currentPageLimit = item"
-                    >
-                        {{item}}
-                    </BDropdownItem>
+                        tag="button"
+                        :text="`${item}`"
+                    />
                 </BDropdown>
 
-                <BButton
+                <button
+                    class="btn btn-primary btn-sm"
                     v-if="exportable"
-                    variant="primary"
-                    size="sm"
                     @click.prevent="onExport"
-                    class="ms-2"
                 >
                     {{i18nStrings.exportButtonText}}
-                </BButton>
+                </button>
             </div>
         </div>
     </div>
@@ -146,6 +148,9 @@ import { flatten, unflatten } from 'flat'
 import { generateString } from './randomString'
 import { onBeforeMount, ref, computed, watch, toValue, nextTick } from 'vue'
 import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell } from './interfaces'
+import BDropdown from './Components/ui/BDropdown.vue'
+import BDropdownItem from './Components/ui/BDropdownItem.vue'
+import BPagination from './Components/ui/BPagination.vue'
 
 const $emit = defineEmits([
     'update:modelValue',

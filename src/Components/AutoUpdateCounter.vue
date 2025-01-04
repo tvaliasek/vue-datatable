@@ -1,13 +1,15 @@
 <template>
-    <BButton
-        size="sm"
-        :variant="(running) ? 'success' : 'primary'"
+    <button
+        :class="[
+            'btn btn-sm',
+            (running) ? 'btn-success' : 'btn-primary'
+        ]"
         @click.prevent="onClick"
     >
         <BsIconArrowRepeat v-show="!running" />
         <BsIconPause v-show="running" />
         {{ text }}
-    </BButton>
+    </button>
 </template>
 
 <script setup lang="ts">

@@ -137,6 +137,20 @@ export default {
                     customComponent () {
                         return CustomButton
                     }
+                },
+                {
+                    text: 'linkHref',
+                    href: '/test',
+                    variant: 'info',
+                    confirm: true,
+                    confirmText: 'Are you sure?'
+                },
+                {
+                    text: 'linkCallback',
+                    hrefCallback (row) {
+                        return '/test/foo'
+                    },
+                    variant: 'primary'
                 }
             ]
         }
