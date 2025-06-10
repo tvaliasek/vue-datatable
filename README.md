@@ -59,6 +59,7 @@ Define columns (header prop) and provide dataset as array of objects. See the ex
 | pageOptionsVariant | String | no | 'primary' | Bootstrap variant for page options buttons |
 | autoUpdateButtonVariant | String | no | 'primary' | Bootstrap variant for auto update button |
 | autoUpdateButtonRunningVariant | String | no | 'secondary' | Bootstrap variant for auto update button when running |
+| exportButtonVariant | String | no | 'primary' | Bootstrap variant for export button |
 
 ### DataTable column definition
 
