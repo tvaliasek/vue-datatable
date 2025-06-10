@@ -54,6 +54,8 @@ Define columns (header prop) and provide dataset as array of objects. See the ex
 | remoteDataMode | Boolean | no | false | set to true to enable remote data mode |
 | remoteDataTotalRows | Number | no | 0 | required for pagination to work when remote data mode is enabled, total number of rows in remote dataset |
 | rowClass | String, Function | no | undefined | css class to apply on all rows, or callback (row: Record<string, any) => string or null |
+| paginationFirstNumber | Boolean | no | false | set to true to display first page symbol |
+| paginationLastNumber | Boolean | no | false | set to true to display last page symbol |
 
 ### DataTable column definition
 

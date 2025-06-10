@@ -102,6 +102,8 @@
                         v-model="currentPage"
                         :total="(props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.length"
                         :per-page="currentPageLimit"
+                        :first-number="paginationFirstNumber"
+                        :last-number="paginationLastNumber"
                     />
                 </div>
             </div>
@@ -191,6 +193,8 @@ const props = withDefaults(
         size?: string
         autoUpdateLimit?: number
         rowClass?: string | ((row: Record<string, any>) => null | string)
+        paginationFirstNumber?: boolean
+        paginationLastNumber?: boolean
     }>(),
     {
         remoteDataMode: false,
