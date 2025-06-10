@@ -5,19 +5,14 @@
     </td>
 </template>
 
-<script>
-export default {
-    name: 'CustomCell',
-    props: {
-        row: {
-            type: Object,
-            required: false,
-            default: () => ({})
-        },
-        dataIndex: {
-            type: String,
-            required: false
-        }
-    }
-}
+<script lang="ts" setup>
+
+withDefaults(defineProps<{
+    row?: Record<string, any>
+    dataIndex?: string
+}>(),
+{
+    row: () => ({}),
+    dataIndex: ''
+})
 </script>
