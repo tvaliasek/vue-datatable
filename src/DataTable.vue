@@ -10,6 +10,8 @@
                     v-if="autoUpdate"
                     @refresh="onRefresh"
                     :i18n="i18nStrings"
+                    :button-variant="autoUpdateButtonVariant"
+                    :button-running-variant="autoUpdateButtonRunningVariant"
                     :auto-update-limit="autoUpdateLimit"
                 />
             </div>
@@ -196,6 +198,8 @@ const props = withDefaults(
         paginationFirstNumber?: boolean
         paginationLastNumber?: boolean
         pageOptionsVariant?: ButtonVariant
+        autoUpdateButtonVariant?: ButtonVariant
+        autoUpdateButtonRunningVariant?: ButtonVariant
     }>(),
     {
         remoteDataMode: false,
@@ -226,7 +230,10 @@ const props = withDefaults(
         tableClass: null,
         autoUpdateLimit: 30,
         paginationFirstNumber: false,
-        paginationLastNumber: false
+        paginationLastNumber: false,
+        pageOptionsVariant: undefined,
+        autoUpdateButtonVariant: undefined,
+        autoUpdateButtonRunningVariant: undefined
     }
 )
 

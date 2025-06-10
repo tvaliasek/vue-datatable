@@ -57,6 +57,8 @@ Define columns (header prop) and provide dataset as array of objects. See the ex
 | paginationFirstNumber | Boolean | no | false | set to true to display first page symbol |
 | paginationLastNumber | Boolean | no | false | set to true to display last page symbol |
 | pageOptionsVariant | String | no | 'primary' | Bootstrap variant for page options buttons |
+| autoUpdateButtonVariant | String | no | 'primary' | Bootstrap variant for auto update button |
+| autoUpdateButtonRunningVariant | String | no | 'secondary' | Bootstrap variant for auto update button when running |
 
 ### DataTable column definition
 
