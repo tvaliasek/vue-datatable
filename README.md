@@ -56,6 +56,7 @@ Define columns (header prop) and provide dataset as array of objects. See the ex
 | rowClass | String, Function | no | undefined | css class to apply on all rows, or callback (row: Record<string, any) => string or null |
 | paginationFirstNumber | Boolean | no | false | set to true to display first page symbol |
 | paginationLastNumber | Boolean | no | false | set to true to display last page symbol |
+| pageOptionsVariant | String | no | 'primary' | Bootstrap variant for page options buttons |
 
 ### DataTable column definition
 

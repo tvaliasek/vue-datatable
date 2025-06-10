@@ -47,6 +47,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, nextTick, onBeforeUnmount } from 'vue'
+import type { ButtonVariant } from '../../interfaces'
 
 enum DROPDOWN_AUTO_CLOSE {
     INSIDE = 'inside',
@@ -58,8 +59,7 @@ export interface BDropdownProps {
     alignment?: 'start' | 'end'
     menuMinWidth?: string
     text?: string
-    buttonVariant?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'link'
-    variant?: 'dark' | 'light'
+    buttonVariant?: ButtonVariant
     icon?: string
     size?: 'sm' | 'lg'
     autoClose?: DROPDOWN_AUTO_CLOSE | boolean

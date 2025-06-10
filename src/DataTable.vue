@@ -113,8 +113,8 @@
 
                 <BDropdown
                     v-if="paging"
-                    variant="primary"
                     :text="`${i18nStrings.perPage} ${currentPageLimit}`"
+                    :button-variant="pageOptionsVariant"
                     size="sm"
                 >
                     <BDropdownItem
@@ -149,7 +149,7 @@ import naturalSort from './Sorters/naturalSort'
 import { flatten, unflatten } from 'flat'
 import { generateString } from './randomString'
 import { onBeforeMount, ref, computed, watch, toValue, nextTick } from 'vue'
-import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell } from './interfaces'
+import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell, ButtonVariant } from './interfaces'
 import BDropdown from './Components/ui/BDropdown.vue'
 import BDropdownItem from './Components/ui/BDropdownItem.vue'
 import BPagination from './Components/ui/BPagination.vue'
@@ -195,6 +195,7 @@ const props = withDefaults(
         rowClass?: string | ((row: Record<string, any>) => null | string)
         paginationFirstNumber?: boolean
         paginationLastNumber?: boolean
+        pageOptionsVariant?: ButtonVariant
     }>(),
     {
         remoteDataMode: false,
@@ -223,7 +224,9 @@ const props = withDefaults(
         stateSavingUniqueKey: 'vueDataTable',
         tableUniqueKey: null,
         tableClass: null,
-        autoUpdateLimit: 30
+        autoUpdateLimit: 30,
+        paginationFirstNumber: false,
+        paginationLastNumber: false
     }
 )
 

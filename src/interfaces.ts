@@ -18,7 +18,7 @@ export interface ColumnDefinition {
 }
 
 export interface ActionButtonDefinition {
-    text: string
+    text?: string
     event?: string
     variant?: string
     confirm?: boolean
@@ -45,3 +45,8 @@ export interface ProcessedRowData {
     isSelected: boolean
     cells: ProcessedCell[]
 }
+
+type BaseButtonVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'link'
+type OutlineButtonVariant = `outline-${BaseButtonVariant}`
+
+export type ButtonVariant = BaseButtonVariant | OutlineButtonVariant
