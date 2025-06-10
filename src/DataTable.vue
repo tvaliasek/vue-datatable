@@ -129,7 +129,8 @@
                 </BDropdown>
 
                 <button
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-sm"
+                    :class="`btn-${exportButtonVariant}`"
                     v-if="exportable"
                     @click.prevent="onExport"
                 >
@@ -200,6 +201,7 @@ const props = withDefaults(
         pageOptionsVariant?: ButtonVariant
         autoUpdateButtonVariant?: ButtonVariant
         autoUpdateButtonRunningVariant?: ButtonVariant
+        exportButtonVariant?: ButtonVariant
     }>(),
     {
         remoteDataMode: false,
@@ -233,7 +235,8 @@ const props = withDefaults(
         paginationLastNumber: false,
         pageOptionsVariant: undefined,
         autoUpdateButtonVariant: undefined,
-        autoUpdateButtonRunningVariant: undefined
+        autoUpdateButtonRunningVariant: undefined,
+        exportButtonVariant: 'primary'
     }
 )
 
