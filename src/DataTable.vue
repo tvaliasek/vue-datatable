@@ -112,30 +112,41 @@
 
             <div class="d-flex align-items-center align-content-center justify-content-end gap-2 flex-wrap">
                 <slot name="bottomRight"></slot>
-
-                <BDropdown
+                <slot
                     v-if="paging"
-                    :text="`${i18nStrings.perPage} ${currentPageLimit}`"
-                    :button-variant="pageOptionsVariant"
-                    size="sm"
+                    name="paging"
+                    :paging-options="pagingOptions"
+                    :current-page-limit="currentPageLimit"
+                    :on-set-current-page-limit="onSetCurrentPageLimit"
                 >
-                    <BDropdownItem
-                        v-for="item in pagingOptions"
-                        :key="`item-${item}`"
-                        @click="currentPageLimit = item"
-                        tag="button"
-                        :text="`${item}`"
-                    />
-                </BDropdown>
+                    <BDropdown
+                        :text="`${i18nStrings.perPage} ${currentPageLimit}`"
+                        :button-variant="pageOptionsVariant"
+                        size="sm"
+                    >
+                        <BDropdownItem
+                            v-for="item in pagingOptions"
+                            :key="`item-${item}`"
+                            @click="onSetCurrentPageLimit(item)"
+                            tag="button"
+                            :text="`${item}`"
+                        />
+                    </BDropdown>
+                </slot>
 
-                <button
-                    class="btn btn-sm"
-                    :class="`btn-${exportButtonVariant}`"
+                <slot
                     v-if="exportable"
-                    @click.prevent="onExport"
+                    name="exportButton"
+                    :on-export="onExport"
                 >
-                    {{i18nStrings.exportButtonText}}
-                </button>
+                    <button
+                        class="btn btn-sm"
+                        :class="`btn-${exportButtonVariant}`"
+                        @click.prevent="onExport"
+                    >
+                        {{i18nStrings.exportButtonText}}
+                    </button>
+                </slot>
             </div>
         </div>
     </div>
@@ -441,6 +452,10 @@ onBeforeMount(() => {
         }
     }
 })
+
+function onSetCurrentPageLimit (value: number): void {
+    currentPageLimit.value = value
+}
 
 function onSelectAll (): void {
     selectedRows.value = sortedData.value.map(item => unflatten(item, { safe: true }))

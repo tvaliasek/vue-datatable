@@ -61,6 +61,24 @@ Define columns (header prop) and provide dataset as array of objects. See the ex
 | autoUpdateButtonRunningVariant | String | no | 'secondary' | Bootstrap variant for auto update button when running |
 | exportButtonVariant | String | no | 'primary' | Bootstrap variant for export button |
 
+### DataTable slots
+
+The `DataTable` component provides several slots to customize its layout and content. Some slots are **scoped**, meaning they provide additional props for advanced customization.
+
+| Slot Name      | Scoped? | Description                                                                                | Slot Props (if scoped)                                   |
+|----------------|---------|--------------------------------------------------------------------------------------------|----------------------------------------------------------|
+| `left`         | No      | Content for the left side above the table (header row, left column).                       | —                                                        |
+| `right`        | No      | Content for the right side above the table (header row, right column).                     | —                                                        |
+| `beforeTable`  | No      | Content rendered before the table element.                                                 | —                                                        |
+| `afterTable`   | No      | Content rendered after the table element.                                                  | —                                                        |
+| `firstRow`     | No      | Content rendered as the first row in the table body (`tbody`).                             | —                                                        |
+| `lastRow`      | No      | Content rendered as the last row in the table body (`tbody`).                              | —                                                        |
+| `bottomLeft`   | No      | Content rendered below the table, aligned to the bottom left (before pagination controls). | —                                                        |
+| `bottomRight`  | No      | Content rendered below the table, aligned to the bottom right (after pagination controls). | —                                                        |
+| `paging`       | Yes     | Customizes the page size dropdown (shown if `paging` is enabled).                          | `pagingOptions`, `currentPageLimit`, `onSetCurrentPageLimit` |
+| `exportButton` | Yes     | Custom export button (shown if `exportable` is enabled).                                                                      | `onExport`                                               |
+
+
 ### DataTable column definition
 
 Columns are defined as Array of objects
