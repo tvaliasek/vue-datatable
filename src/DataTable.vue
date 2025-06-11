@@ -10,6 +10,8 @@
                     v-if="autoUpdate"
                     @refresh="onRefresh"
                     :i18n="i18nStrings"
+                    :button-variant="autoUpdateButtonVariant"
+                    :button-running-variant="autoUpdateButtonRunningVariant"
                     :auto-update-limit="autoUpdateLimit"
                 />
             </div>
@@ -102,35 +104,49 @@
                         v-model="currentPage"
                         :total="(props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.length"
                         :per-page="currentPageLimit"
+                        :first-number="paginationFirstNumber"
+                        :last-number="paginationLastNumber"
                     />
                 </div>
             </div>
 
             <div class="d-flex align-items-center align-content-center justify-content-end gap-2 flex-wrap">
                 <slot name="bottomRight"></slot>
-
-                <BDropdown
+                <slot
                     v-if="paging"
-                    variant="primary"
-                    :text="`${i18nStrings.perPage} ${currentPageLimit}`"
-                    size="sm"
+                    name="paging"
+                    :paging-options="pagingOptions"
+                    :current-page-limit="currentPageLimit"
+                    :on-set-current-page-limit="onSetCurrentPageLimit"
                 >
-                    <BDropdownItem
-                        v-for="item in pagingOptions"
-                        :key="`item-${item}`"
-                        @click="currentPageLimit = item"
-                        tag="button"
-                        :text="`${item}`"
-                    />
-                </BDropdown>
+                    <BDropdown
+                        :text="`${i18nStrings.perPage} ${currentPageLimit}`"
+                        :button-variant="pageOptionsVariant"
+                        size="sm"
+                    >
+                        <BDropdownItem
+                            v-for="item in pagingOptions"
+                            :key="`item-${item}`"
+                            @click="onSetCurrentPageLimit(item)"
+                            tag="button"
+                            :text="`${item}`"
+                        />
+                    </BDropdown>
+                </slot>
 
-                <button
-                    class="btn btn-primary btn-sm"
+                <slot
                     v-if="exportable"
-                    @click.prevent="onExport"
+                    name="exportButton"
+                    :on-export="onExport"
                 >
-                    {{i18nStrings.exportButtonText}}
-                </button>
+                    <button
+                        class="btn btn-sm"
+                        :class="`btn-${exportButtonVariant}`"
+                        @click.prevent="onExport"
+                    >
+                        {{i18nStrings.exportButtonText}}
+                    </button>
+                </slot>
             </div>
         </div>
     </div>
@@ -147,7 +163,7 @@ import naturalSort from './Sorters/naturalSort'
 import { flatten, unflatten } from 'flat'
 import { generateString } from './randomString'
 import { onBeforeMount, ref, computed, watch, toValue, nextTick } from 'vue'
-import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell } from './interfaces'
+import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell, ButtonVariant } from './interfaces'
 import BDropdown from './Components/ui/BDropdown.vue'
 import BDropdownItem from './Components/ui/BDropdownItem.vue'
 import BPagination from './Components/ui/BPagination.vue'
@@ -191,6 +207,12 @@ const props = withDefaults(
         size?: string
         autoUpdateLimit?: number
         rowClass?: string | ((row: Record<string, any>) => null | string)
+        paginationFirstNumber?: boolean
+        paginationLastNumber?: boolean
+        pageOptionsVariant?: ButtonVariant
+        autoUpdateButtonVariant?: ButtonVariant
+        autoUpdateButtonRunningVariant?: ButtonVariant
+        exportButtonVariant?: ButtonVariant
     }>(),
     {
         remoteDataMode: false,
@@ -219,7 +241,13 @@ const props = withDefaults(
         stateSavingUniqueKey: 'vueDataTable',
         tableUniqueKey: null,
         tableClass: null,
-        autoUpdateLimit: 30
+        autoUpdateLimit: 30,
+        paginationFirstNumber: false,
+        paginationLastNumber: false,
+        pageOptionsVariant: undefined,
+        autoUpdateButtonVariant: undefined,
+        autoUpdateButtonRunningVariant: undefined,
+        exportButtonVariant: 'primary'
     }
 )
 
@@ -424,6 +452,10 @@ onBeforeMount(() => {
         }
     }
 })
+
+function onSetCurrentPageLimit (value: number): void {
+    currentPageLimit.value = value
+}
 
 function onSelectAll (): void {
     selectedRows.value = sortedData.value.map(item => unflatten(item, { safe: true }))

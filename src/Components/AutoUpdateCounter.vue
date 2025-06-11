@@ -2,7 +2,7 @@
     <button
         :class="[
             'btn btn-sm',
-            (running) ? 'btn-success' : 'btn-primary'
+            (running) ? `btn-${buttonRunningVariant}` : `btn-${buttonVariant}`
         ]"
         @click.prevent="onClick"
     >
@@ -16,12 +16,17 @@
 import { onBeforeUnmount, computed, ref } from 'vue'
 import BsIconArrowRepeat from '../Icons/bsIconArrowRepeat.vue'
 import BsIconPause from '../Icons/bsIconPause.vue'
+import type { ButtonVariant } from '../interfaces'
 
 const props = withDefaults(defineProps<{
     i18n: Record<string, string>
     autoUpdateLimit?: number
+    buttonVariant?: ButtonVariant
+    buttonRunningVariant?: ButtonVariant
 }>(), {
-    autoUpdateLimit: 30
+    autoUpdateLimit: 30,
+    buttonVariant: 'primary',
+    buttonRunningVariant: 'success'
 })
 
 const $emit = defineEmits(['refresh'])

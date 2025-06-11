@@ -54,6 +54,30 @@ Define columns (header prop) and provide dataset as array of objects. See the ex
 | remoteDataMode | Boolean | no | false | set to true to enable remote data mode |
 | remoteDataTotalRows | Number | no | 0 | required for pagination to work when remote data mode is enabled, total number of rows in remote dataset |
 | rowClass | String, Function | no | undefined | css class to apply on all rows, or callback (row: Record<string, any) => string or null |
+| paginationFirstNumber | Boolean | no | false | set to true to display first page symbol |
+| paginationLastNumber | Boolean | no | false | set to true to display last page symbol |
+| pageOptionsVariant | String | no | 'primary' | Bootstrap variant for page options buttons |
+| autoUpdateButtonVariant | String | no | 'primary' | Bootstrap variant for auto update button |
+| autoUpdateButtonRunningVariant | String | no | 'secondary' | Bootstrap variant for auto update button when running |
+| exportButtonVariant | String | no | 'primary' | Bootstrap variant for export button |
+
+### DataTable slots
+
+The `DataTable` component provides several slots to customize its layout and content. Some slots are **scoped**, meaning they provide additional props for advanced customization.
+
+| Slot Name      | Scoped? | Description                                                                                | Slot Props (if scoped)                                   |
+|----------------|---------|--------------------------------------------------------------------------------------------|----------------------------------------------------------|
+| `left`         | No      | Content for the left side above the table (header row, left column).                       | —                                                        |
+| `right`        | No      | Content for the right side above the table (header row, right column).                     | —                                                        |
+| `beforeTable`  | No      | Content rendered before the table element.                                                 | —                                                        |
+| `afterTable`   | No      | Content rendered after the table element.                                                  | —                                                        |
+| `firstRow`     | No      | Content rendered as the first row in the table body (`tbody`).                             | —                                                        |
+| `lastRow`      | No      | Content rendered as the last row in the table body (`tbody`).                              | —                                                        |
+| `bottomLeft`   | No      | Content rendered below the table, aligned to the bottom left (before pagination controls). | —                                                        |
+| `bottomRight`  | No      | Content rendered below the table, aligned to the bottom right (after pagination controls). | —                                                        |
+| `paging`       | Yes     | Customizes the page size dropdown (shown if `paging` is enabled).                          | `pagingOptions`, `currentPageLimit`, `onSetCurrentPageLimit` |
+| `exportButton` | Yes     | Custom export button (shown if `exportable` is enabled).                                                                      | `onExport`                                               |
+
 
 ### DataTable column definition
 

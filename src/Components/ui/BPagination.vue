@@ -3,6 +3,16 @@
         class="pagination justify-content-start pagination-sm"
         role="menubar"
     >
+        <li v-if="firstNumber" class="page-item">
+            <button
+                class="page-link"
+                :disabled="props.modelValue <= 1"
+                :class="{ 'disabled': props.modelValue <= 1 }"
+                @click.prevent="onPageClick(1)"
+            >
+                <span aria-hidden="true">&laquo;</span>
+            </button>
+        </li>
         <li class="page-item">
             <button
                 class="page-link"
@@ -10,7 +20,9 @@
                 :disabled="props.modelValue <= 1"
                 :class="{ 'disabled': props.modelValue <= 1 }"
             >
-                <span aria-hidden="true">&laquo;</span>
+                <span aria-hidden="true">
+                    &lsaquo;
+                </span>
             </button>
         </li>
         <li
@@ -40,6 +52,18 @@
                 :disabled="props.modelValue >= pages.length"
                 :class="{ 'disabled': props.modelValue >= pages.length }"
             >
+                <span aria-hidden="true">
+                    &rsaquo;
+                </span>
+            </button>
+        </li>
+        <li v-if="lastNumber" class="page-item">
+            <button
+                class="page-link"
+                :disabled="props.modelValue >= pages.length"
+                :class="{ 'disabled': props.modelValue >= pages.length }"
+                @click.prevent="onPageClick(pages.length)"
+            >
                 <span aria-hidden="true">&raquo;</span>
             </button>
         </li>
@@ -54,11 +78,15 @@ const props = withDefaults(defineProps<{
     total?: number
     perPage?: number
     ellipsisText?: string
+    firstNumber?: boolean
+    lastNumber?: boolean
 }>(), {
     modelValue: 1,
     total: 0,
     perPage: 10,
-    ellipsisText: '...'
+    ellipsisText: '...',
+    firstNumber: false,
+    lastNumber: false
 })
 
 const $emit = defineEmits([
