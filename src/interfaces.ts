@@ -1,8 +1,8 @@
 import type { Component } from 'vue'
 
-export interface ColumnDefinition {
+export interface ColumnDefinition<T extends Record<string, any> | undefined = undefined> {
     text: string
-    data: string
+    data: T extends undefined ? string : keyof T
     sortable?: boolean
     filterable?: boolean
     format?: (value: any, row: Record<string, any>) => any
