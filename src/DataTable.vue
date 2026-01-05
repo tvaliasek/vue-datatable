@@ -173,7 +173,8 @@ const $emit = defineEmits([
     'action',
     'remote-data-refresh',
     'refresh',
-    'export'
+    'export',
+    'request-error'
 ])
 
 const props = withDefaults(
@@ -603,7 +604,13 @@ function onRefresh (): void {
 }
 
 function onFilter (value: Record<string, any>): void {
-    filter.value = { ...value }
+    const cleanedFilter: Record<string, any> = {}
+    for (const key in value) {
+        if (value[key] !== '' && value[key] !== null && value[key] !== undefined) {
+            cleanedFilter[key] = value[key]
+        }
+    }
+    filter.value = { ...cleanedFilter }
 }
 
 function onAction (value: { event: string, row: Record<string, any> }): void {
