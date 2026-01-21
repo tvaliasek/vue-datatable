@@ -82,7 +82,7 @@
                                 {{aggregateTexts[cell.data]}}<br/>
                             </span>
                             <span v-if="typeof aggregateFunctions[cell.data] === 'function'">
-                                {{filteredData.reduce(aggregateFunctions[cell.data], aggregateInitialValues[cell.data])}}
+                                {{ getAggregateValue(cell.data) }}
                             </span>
                         </th>
                         <th v-if="actions"></th>
@@ -160,7 +160,7 @@ import LoadingIndicator from './Components/LoadingIndicator.vue'
 import AutoUpdateCounter from './Components/AutoUpdateCounter.vue'
 import langs from './Langs/index'
 import naturalSort from './Sorters/naturalSort'
-import { flatten, unflatten } from 'flat'
+import { flatten, unflatten, type FlattenOptions } from 'flat'
 import { generateString } from './randomString'
 import { onBeforeMount, ref, computed, watch, toValue, nextTick } from 'vue'
 import type { ProcessedRowData, ColumnDefinition, ActionButtonDefinition, ProcessedCell, ButtonVariant } from './interfaces'
@@ -255,8 +255,9 @@ const props = withDefaults(
 const filter = ref<Record<string, string>>({})
 const sortBy = ref<string | null>(null)
 const sortDirection = ref<string | null>(null)
-const currentPage = ref(1)
-const currentPageLimit = ref((props.pagingOptions.length > 0) ? props.pagingOptions[0] : 15)
+const currentPage = ref<number>(1)
+const initialPageLimit: number = (props.pagingOptions[0] ?? 15)
+const currentPageLimit = ref<number>(initialPageLimit)
 const uniqueKey = ref<string>(props.tableUniqueKey ?? `vueDataTable_${generateString(20)}`)
 
 watch(filter, () => {
@@ -292,21 +293,26 @@ const tableClassnames = computed(() => {
     return classNames.join(' ')
 })
 
-const selectedRows = computed({
-    get () {
-        return props.modelValue
-    },
-    set (value) {
-        $emit('update:modelValue', value)
+const selectedRows = computed<Array<Record<string, any>>>(
+    {
+        get () {
+            return props.modelValue
+        },
+        set (value: Array<Record<string, any>>) {
+            $emit('update:modelValue', value)
+        }
     }
+)
+
+const flattenedSelectedRows = computed<Record<string, any>[]>(() => {
+    const options: FlattenOptions = { safe: true }
+    return props.modelValue.map(item => flatten(item, options) as Record<string, any>)
 })
 
-const flattenedSelectedRows = computed(() => {
-    return props.modelValue.map(item => flatten(item, { safe: true }))
-})
-
-const selectedRowIds = computed(() => {
-    return flattenedSelectedRows.value.filter(item => item[props.selectableRowsTrackBy] !== undefined).map(item => item[props.selectableRowsTrackBy])
+const selectedRowIds = computed<any[]>(() => {
+    return flattenedSelectedRows.value
+        .filter((item) => (item as Record<string, any>)[props.selectableRowsTrackBy] !== undefined)
+        .map((item) => (item as Record<string, any>)[props.selectableRowsTrackBy])
 })
 
 const responsiveClass = computed(() => {
@@ -382,13 +388,13 @@ const aggregateInitialValues = computed(() => {
     return tmp
 })
 
-const flattenedData = computed(() => {
+const flattenedData = computed<Record<string, any>[]>(() => {
     return props.data.map((item) => {
-        return flatten(item, { safe: true })
+        return flatten(item, { safe: true }) as Record<string, any>
     })
 })
 
-const filteredData = computed(() => {
+const filteredData = computed<Record<string, any>[]>(() => {
     if (props.remoteDataMode || filter.value === undefined || filter.value === null || Object.keys(filter.value).length === 0) {
         return flattenedData.value
     }
@@ -421,14 +427,14 @@ const filteredData = computed(() => {
     })
 })
 
-const sortedData = computed(() => {
+const sortedData = computed<Record<string, any>[]>(() => {
     if (!props.remoteDataMode && sortBy.value !== null) {
         return sortData(filteredData.value)
     }
     return filteredData.value
 })
 
-const pagedData = computed(() => {
+const pagedData = computed<Record<string, any>[]>(() => {
     if (!props.remoteDataMode && props.paging) {
         const offset = ((-1 + currentPage.value) * currentPageLimit.value)
         return getPortionOfArray(sortedData.value, offset, currentPageLimit.value)
@@ -436,7 +442,7 @@ const pagedData = computed(() => {
     return sortedData.value
 })
 
-const processedData = computed(() => {
+const processedData = computed<ProcessedRowData[]>(() => {
     return processData(pagedData.value)
 })
 
@@ -459,7 +465,7 @@ function onSetCurrentPageLimit (value: number): void {
 }
 
 function onSelectAll (): void {
-    selectedRows.value = sortedData.value.map(item => unflatten(item, { safe: true }))
+    selectedRows.value = sortedData.value.map(item => unflatten(item))
 }
 
 function onSelectNone (): void {
@@ -522,7 +528,7 @@ function onExport (): void {
 function processData (pagedData: Array<Record<string, any>>): ProcessedRowData[] {
     return pagedData.map((row) => {
         return {
-            row: unflatten(row, { safe: true }),
+            row: unflatten(row),
             isSelected: (row[props.selectableRowsTrackBy] !== undefined) ? selectedRowIds.value.includes(row[props.selectableRowsTrackBy]) : false,
             cells: props.header.map((item) => {
                 if (row.hasOwnProperty(item.data)) {
@@ -563,23 +569,37 @@ function sortData (filteredData: Array<Record<string, any>>) {
 }
 
 function onRowSelectToggle (row: Record<string, any>) {
-    const flatRow = flatten(row, { safe: true })
+    const options: FlattenOptions = { safe: true }
+    const flatRow: Record<string, any> = flatten(row, options)
     if (selectedRowIds.value.includes(flatRow[props.selectableRowsTrackBy])) {
-        selectedRows.value = selectedRows.value.filter((item) => flatten(item, { safe: true })[props.selectableRowsTrackBy] !== flatRow[props.selectableRowsTrackBy])
+        selectedRows.value = selectedRows.value.filter((item: Record<string, any>) => (flatten(item, options) as Record<string, any>)[props.selectableRowsTrackBy] !== flatRow[props.selectableRowsTrackBy])
     } else {
         selectedRows.value = [...selectedRows.value, row]
     }
 }
 
 function getPortionOfArray (sourceArray: Array<Record<string, any>>, offset: number, limit: number): Array<Record<string, any>> {
-    const content = []
+    const content: Array<Record<string, any>> = []
     for (let i = offset; i < sourceArray.length; i++) {
-        content.push(sourceArray[i])
+        const item = sourceArray[i]
+        if (item === undefined) {
+            break
+        }
+        content.push(item)
         if (content.length >= limit) {
             break
         }
     }
     return content
+}
+
+function getAggregateValue (columnKey: string): any {
+    const fn = aggregateFunctions.value[columnKey]
+    if (typeof fn !== 'function') {
+        return undefined
+    }
+    const initialValue = aggregateInitialValues.value[columnKey]
+    return (filteredData.value as any[]).reduce(fn as any, initialValue)
 }
 
 function onSort (cellDataProp: string): void {

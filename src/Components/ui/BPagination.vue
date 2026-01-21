@@ -125,10 +125,10 @@ const pagesShown = computed(() => {
     const result = pages.value.slice(start, end)
 
     if (start > 0) {
-        result[0].isEllipsis = true
+        result[0]!.isEllipsis = true
     }
     if (end < pages.value.length) {
-        result[result.length - 1].isEllipsis = true
+        result[result.length - 1]!.isEllipsis = true
     }
     return result
 })

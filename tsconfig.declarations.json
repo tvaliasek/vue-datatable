@@ -1,0 +1,30 @@
+{
+    "extends": "./tsconfig.app.json",
+    "include": [
+        "./src/**/*.ts",
+        "./src/**/*.vue"
+    ],
+    "exclude": [
+        "src/**/*.spec.ts",
+        "src/**/*.stories.ts",
+        "src/main.ts",
+        "src/App.vue",
+        "src/mocks/**/*",
+        "src/testSchema/**/*",
+    ],
+    "compilerOptions": {
+        "noEmit": false,
+        "declaration": true,
+        "declarationMap": true,
+        "composite": false,
+        "tsBuildInfoFile": null,
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "types": [
+            "node",
+            "jsdom"
+        ]
+    }
+}

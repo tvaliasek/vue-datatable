@@ -1,20 +1,11 @@
 {
-    "files": [],
-    "references": [
-        {
-            "path": "./tsconfig.config.json"
-        },
-        {
-            "path": "./tsconfig.app.json"
-        },
-        {
-            "path": "./tsconfig.vitest.json"
-        }
-    ],
-    "compilerOptions": {
-        "target": "ES2021",
-        "paths": {
-            "@/*": ["./src"]
-        }
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
     }
+  ]
 }
