@@ -15,7 +15,7 @@
                         'btn btn-sm',
                         `btn-${button.variant ?? 'primary'}`,
                         {
-                            'btn-disabled': disableButtons || runningActions.includes(button.event)
+                            'btn-disabled': disableButtons || runningActions.includes(String(button.event))
                         }
                     ]"
                     @click.prevent="onButtonClick(button)"
@@ -35,7 +35,7 @@
                         'btn btn-sm',
                         `btn-${button.variant ?? 'primary'}`,
                         {
-                            'btn-disabled': disableButtons || runningActions.includes(button.event)
+                            'btn-disabled': disableButtons || runningActions.includes(String(button.event))
                         }
                     ]"
                     :href="(typeof button.hrefCallback === 'function') ? button.hrefCallback(row) : button.href"
@@ -139,13 +139,13 @@ function emitButtonAction (button: ActionButtonDefinition): void {
     }
 
     if (typeof button?.href === 'string') {
-        window.location = button.href
+        window.location.href = button.href
     }
 
     if (typeof button?.hrefCallback === 'function') {
         const href = button.hrefCallback(props.row)
         if (typeof href === 'string') {
-            window.location = href
+            window.location.href = href
         }
     }
 }

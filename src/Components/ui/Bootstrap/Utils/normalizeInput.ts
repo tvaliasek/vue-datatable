@@ -11,7 +11,7 @@ export default (
     }
     if (modelModifiers?.number && typeof update === 'string' && update !== '') {
         const parsed = Number.parseFloat(update)
-        update = Number.isNaN(parsed) ? update : parsed
+        update = Number.isNaN(parsed) ? update : String(parsed)
     }
-    return update
+    return String(update)
 }

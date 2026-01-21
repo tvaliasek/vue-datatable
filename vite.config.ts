@@ -1,57 +1,35 @@
-/* eslint-disable import/no-unresolved */
-import { fileURLToPath, URL } from 'node:url'
-import Components from 'unplugin-vue-components/vite'
-import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import { resolve } from 'node:path'
 import dts from 'vite-plugin-dts'
-import typescript2 from 'rollup-plugin-typescript2'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        vue(),
+        vue({}),
         dts({
-            insertTypesEntry: true
+            tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json')
         }),
-        Components({
-            resolvers: [BootstrapVueNextResolver()],
-            dts: true
-        }),
-        typescript2({
-            check: false,
-            include: [
-                'src/Components/**/*.vue',
-                'src/DataTable.vue'
-            ],
-            tsconfigOverride: {
-                compilerOptions: {
-                    outDir: 'dist',
-                    sourceMap: true,
-                    declaration: true,
-                    declarationMap: true
-                }
-            },
-            exclude: ['vite.config.ts']
-        })
+        vueDevTools()
     ],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': resolve(__dirname, 'src')
         }
     },
     build: {
+        sourcemap: true,
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'DataTable',
-            fileName: 'data-table'
+            fileName: 'data-table',
+            formats: ['es', 'umd', 'cjs']
         },
         rollupOptions: {
             external: [
                 'vue',
-                'bootstrap',
-                { 'bootstrap-vue-next': 'bootstrap-vue-next' }
+                'bootstrap'
             ],
             output: {
                 globals: {
@@ -60,5 +38,26 @@ export default defineConfig({
                 assetFileNames: 'data-table.[ext]'
             }
         }
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: [
+                    'color-functions',
+                    'mixed-decls',
+                    'import',
+                    'global-builtin'
+                ]
+            },
+            sass: {
+                silenceDeprecations: [
+                    'color-functions',
+                    'mixed-decls',
+                    'import',
+                    'global-builtin'
+                ]
+            }
+        }
     }
 })
+
