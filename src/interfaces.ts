@@ -17,6 +17,14 @@ export interface ColumnDefinition<T extends Record<string, any> | undefined = un
     clickToSelect?: boolean
 }
 
+export interface DataTableDisplayConfig {
+    currentPage: number
+    currentPageLimit: number
+    filter: Record<string, any>
+    sortBy: string | null
+    sortDirection: null | 'ASC' | 'DESC'
+}
+
 export interface ActionButtonDefinition {
     text?: string
     event?: string
