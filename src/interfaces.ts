@@ -17,7 +17,7 @@ export interface ColumnDefinition<T extends Record<string, any> | undefined = un
     clickToSelect?: boolean
 }
 
-export interface DataTableDisplayConfig {
+export interface DisplayConfig {
     currentPage: number
     currentPageLimit: number
     filter: Record<string, any>
