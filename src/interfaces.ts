@@ -25,18 +25,18 @@ export interface DisplayConfig {
     sortDirection: null | 'ASC' | 'DESC'
 }
 
-export interface ActionButtonDefinition {
+export interface ActionButtonDefinition<TRowData extends Record<string, any> = Record<string, any>> {
     text?: string
     event?: string
     variant?: string
     confirm?: boolean
     confirmText?: string
     customComponent?: string | (() => Component)
-    visibleIf?: (row: ProcessedRowData) => boolean
+    visibleIf?: (row: ProcessedRowData<TRowData>) => boolean
     customTextComponent?: string | CallableFunction
     customTextComponentProps?: Record<string, any>
     href?: string
-    hrefCallback?: (row: ProcessedRowData) => string | undefined
+    hrefCallback?: (row: ProcessedRowData<TRowData>) => string | undefined
 }
 
 export interface ProcessedCell {
@@ -48,8 +48,8 @@ export interface ProcessedCell {
     clickToSelect?: boolean
 }
 
-export interface ProcessedRowData {
-    row: Record<string, any>
+export interface ProcessedRowData<TRow extends Record<string, any> = Record<string, any>> {
+    row: TRow
     isSelected: boolean
     cells: ProcessedCell[]
 }
