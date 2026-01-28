@@ -77,14 +77,14 @@
     </td>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="TRowData extends Record<string, any> = Record<string, any>">
 import type { ActionButtonDefinition, ProcessedRowData } from '../interfaces'
 import { ref, computed } from 'vue'
 
 const props = withDefaults(defineProps<{
     actionsOnLeft?: boolean
-    row: ProcessedRowData
-    buttons: ActionButtonDefinition[]
+    row: ProcessedRowData<TRowData>
+    buttons: ActionButtonDefinition<TRowData>[]
     i18n: Record<string, string>
     disableButtons: boolean
     runningActions: string[]
@@ -97,7 +97,7 @@ const props = withDefaults(defineProps<{
 
 const $emit = defineEmits(['action'])
 
-const confirm = ref<ActionButtonDefinition | null>(null)
+const confirm = ref<ActionButtonDefinition<TRowData> | null>(null)
 
 const buttonsList = computed(() => {
     return props.buttons.filter((item) => {
@@ -117,7 +117,7 @@ function onCancel (): void {
     confirm.value = null
 }
 
-function onButtonClick (button: ActionButtonDefinition): void {
+function onButtonClick (button: ActionButtonDefinition<TRowData>): void {
     if (button?.confirm === true) {
         confirm.value = button
     } else {
@@ -129,7 +129,7 @@ function onAction (data: { event: string, row: Record<string, any> }): void {
     $emit('action', data)
 }
 
-function emitButtonAction (button: ActionButtonDefinition): void {
+function emitButtonAction (button: ActionButtonDefinition<TRowData>): void {
     if (typeof button.event === 'string') {
         $emit('action', {
             eventId: `${button.event}-${(new Date()).valueOf()}`,
