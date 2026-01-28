@@ -50,7 +50,7 @@
     </tr>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="TRowData extends Record<string, any> = Record<string, any>">
 import DataRowButtons from './DataRowButtons.vue'
 import type { ProcessedRowData, ActionButtonDefinition, ColumnDefinition, ProcessedCell } from '../interfaces'
 import { computed } from 'vue'
@@ -58,20 +58,20 @@ import { computed } from 'vue'
 const props = withDefaults(defineProps<{
     actionsOnLeft?: boolean
     header: ColumnDefinition[]
-    row: ProcessedRowData
+    row: ProcessedRowData<TRowData>
     actions?: boolean
-    buttons?: ActionButtonDefinition[]
+    buttons?: ActionButtonDefinition<TRowData>[]
     i18n: Record<string, string>
     disableButtons?: boolean
     filter?: Record<string, string>
     runningActions?: string[]
     selectableRows?: boolean
     selectableRowsCheckboxes?: boolean
-    selectableRowsTrackBy?: string
+    selectableRowsTrackBy?: keyof TRowData | 'id'
     selectableRowsClass?: string
     rowIndex: number
     tableUniqueKey: string
-    rowClass?: string | ((row: Record<string, any>) => null | string)
+    rowClass?: string | ((row: TRowData) => null | string)
 }>(), {
     actionsOnLeft: false,
     actions: true,

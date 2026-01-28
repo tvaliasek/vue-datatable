@@ -152,7 +152,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="TRowData extends Record<string, any> = Record<string, any>">
 // eslint-disable @typescript-eslint/restrict-template-expressions
 import DataHeader from './Components/DataHeader.vue'
 import DataRow from './Components/DataRow.vue'
@@ -187,9 +187,9 @@ const props = withDefaults(
         autoUpdate?: boolean
         loading?: boolean
         header?: ColumnDefinition[]
-        data?: Array<Record<string, any>>
+        data?: Array<TRowData>
         actions?: boolean
-        buttons?: ActionButtonDefinition[]
+        buttons?: ActionButtonDefinition<TRowData>[]
         disableButtons?: boolean
         paging?: boolean
         pagingOptions?: number[]
@@ -199,7 +199,7 @@ const props = withDefaults(
         selectableRowsCheckboxes?: boolean
         selectableRowsTrackBy?: string
         selectableRowsClass?: string
-        modelValue?: Array<Record<string, any>>
+        modelValue?: Array<TRowData>
         exportable?: boolean
         stateSaving?: boolean
         stateSavingUniqueKey?: string
@@ -207,7 +207,7 @@ const props = withDefaults(
         tableClass?: string | null
         size?: string
         autoUpdateLimit?: number
-        rowClass?: string | ((row: Record<string, any>) => null | string)
+        rowClass?: string | ((row: TRowData) => null | string)
         paginationFirstNumber?: boolean
         paginationLastNumber?: boolean
         pageOptionsVariant?: ButtonVariant
@@ -442,7 +442,7 @@ const pagedData = computed<Record<string, any>[]>(() => {
     return sortedData.value
 })
 
-const processedData = computed<ProcessedRowData[]>(() => {
+const processedData = computed<ProcessedRowData<TRowData>[]>(() => {
     return processData(pagedData.value)
 })
 
@@ -525,7 +525,7 @@ function onExport (): void {
     $emit('export', data)
 }
 
-function processData (pagedData: Array<Record<string, any>>): ProcessedRowData[] {
+function processData (pagedData: Array<Record<string, any>>): ProcessedRowData<TRowData>[] {
     return pagedData.map((row) => {
         return {
             row: unflatten(row),
