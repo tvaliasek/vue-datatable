@@ -1,9 +1,9 @@
-const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-export function generateString (length = 15): string {
+export function generateString(length = 15): string {
     let result = ''
     const charactersLength = characters.length
-    for ( let i = 0; i < length; i++ ) {
+    for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
 

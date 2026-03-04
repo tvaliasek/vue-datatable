@@ -4,7 +4,7 @@
             <th v-if="selectableRows && selectableRowsCheckboxes" class="vue-datatable-vertical-align-middle">
                 <div class="custom-control custom-checkbox">
                     <label class="d-flex align-items-center align-content-center gap-1">
-                        <input type="checkbox" class="custom-control-input" v-model="selectAllState">
+                        <input type="checkbox" class="custom-control-input" v-model="selectAllState"/>
                         <span>{{ selectedCount }}</span>
                     </label>
                 </div>
@@ -26,7 +26,7 @@
             />
             <th v-if="actions && !actionsOnLeft"></th>
         </tr>
-        <tr v-if="header.filter(item => item.filterable === true)">
+        <tr v-if="header.some(item => item.filterable === true)">
             <th v-if="selectableRows && selectableRowsCheckboxes"></th>
             <th v-if="actions && actionsOnLeft"></th>
             <th
@@ -76,10 +76,10 @@ const props = withDefaults(defineProps<{
 const selectAll = ref(false)
 
 const selectAllState = computed({
-    get () {
+    get() {
         return selectAll.value
     },
-    set (value) {
+    set(value) {
         selectAll.value = value
         $emit((selectAll.value) ? 'selectAll' : 'selectNone')
     }
@@ -93,11 +93,11 @@ watch(computed(() => props.selectedCount), (value) => {
 
 const $emit = defineEmits(['filter', 'sort', 'selectAll', 'selectNone'])
 
-function onFilter (data: Record<string, string>): void {
+function onFilter(data: Record<string, string>): void {
     $emit('filter', data)
 }
 
-function onSort (data: string): void {
+function onSort(data: string): void {
     $emit('sort', data)
 }
 </script>

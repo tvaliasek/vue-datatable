@@ -60,10 +60,10 @@ const props = withDefaults(defineProps<{
 const $emit = defineEmits(['update:modelValue'])
 
 const model = computed<string | number | null>({
-    get () {
+    get() {
         return props.modelValue
     },
-    set (value) {
+    set(value) {
         $emit('update:modelValue', normalizeInput(value, props.modelModifiers as any))
     }
 })

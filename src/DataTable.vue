@@ -295,10 +295,10 @@ const tableClassnames = computed(() => {
 
 const selectedRows = computed<Array<Record<string, any>>>(
     {
-        get () {
+        get() {
             return props.modelValue
         },
-        set (value: Array<Record<string, any>>) {
+        set(value: Array<Record<string, any>>) {
             $emit('update:modelValue', value)
         }
     }
@@ -311,15 +311,15 @@ const flattenedSelectedRows = computed<Record<string, any>[]>(() => {
 
 const selectedRowIds = computed<any[]>(() => {
     return flattenedSelectedRows.value
-        .filter((item) => (item as Record<string, any>)[props.selectableRowsTrackBy] !== undefined)
-        .map((item) => (item as Record<string, any>)[props.selectableRowsTrackBy])
+        .filter(item => (item as Record<string, any>)[props.selectableRowsTrackBy] !== undefined)
+        .map(item => (item as Record<string, any>)[props.selectableRowsTrackBy])
 })
 
 const responsiveClass = computed(() => {
-    if (props.responsive !== undefined) {
-        return (props.responsive === true) ? 'table-responsive' : `table-responsive-${props.responsive}`
+    if (props.responsive === false || props.responsive === undefined) {
+        return null
     }
-    return null
+    return (props.responsive === true) ? 'table-responsive' : `table-responsive-${props.responsive}`
 })
 
 const i18nStrings = computed(() => {
@@ -460,19 +460,19 @@ onBeforeMount(() => {
     }
 })
 
-function onSetCurrentPageLimit (value: number): void {
+function onSetCurrentPageLimit(value: number): void {
     currentPageLimit.value = value
 }
 
-function onSelectAll (): void {
+function onSelectAll(): void {
     selectedRows.value = sortedData.value.map(item => unflatten(item))
 }
 
-function onSelectNone (): void {
+function onSelectNone(): void {
     selectedRows.value = []
 }
 
-function onSaveState (): void {
+function onSaveState(): void {
     void nextTick(() => {
         if (props.stateSaving && props.stateSavingUniqueKey) {
             const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
@@ -491,7 +491,7 @@ function onSaveState (): void {
 }
 
 const _refreshTm = ref<any>(undefined)
-function onRemoteDataRefresh (): void {
+function onRemoteDataRefresh(): void {
     clearTimeout(_refreshTm.value)
     _refreshTm.value = setTimeout(() => {
         $emit(
@@ -507,14 +507,14 @@ function onRemoteDataRefresh (): void {
     }, 250)
 }
 
-function onExport (): void {
+function onExport(): void {
     const header: Record<string, string> = {}
     for (const entry of props.header) {
         header[entry.data] = entry.text
     }
     const data = [
         header,
-        ...processData(sortData(flattenedData.value)).map(entry => {
+        ...processData(sortData(flattenedData.value)).map((entry) => {
             const jsonObject: Record<string, any> = {}
             for (const item of entry.cells) {
                 jsonObject[item.index] = item.content
@@ -525,7 +525,7 @@ function onExport (): void {
     $emit('export', data)
 }
 
-function processData (pagedData: Array<Record<string, any>>): ProcessedRowData<TRowData>[] {
+function processData(pagedData: Array<Record<string, any>>): ProcessedRowData<TRowData>[] {
     return pagedData.map((row) => {
         return {
             row: unflatten(row),
@@ -554,21 +554,19 @@ function processData (pagedData: Array<Record<string, any>>): ProcessedRowData<T
     })
 }
 
-function sortData (filteredData: Array<Record<string, any>>) {
+function sortData(filteredData: Array<Record<string, any>>) {
     if (sortBy.value !== null) {
         const sortFn = sortFunctions.value[sortBy.value] ?? naturalSort
         if (sortFn !== null) {
-            return ((sortDirection.value === 'DESC')
-                // @ts-expect-error
-                ? [...filteredData].sort((a, b) => sortFn(a[sortBy.value], b[sortBy.value]))
-                // @ts-expect-error
-                : [...filteredData].sort((a, b) => sortFn(b[sortBy.value], a[sortBy.value])))
+            return ((sortDirection.value === 'ASC')
+                ? [...filteredData].sort((a, b) => sortFn(a[sortBy.value!], b[sortBy.value!]))
+                : [...filteredData].sort((a, b) => sortFn(b[sortBy.value!], a[sortBy.value!])))
         }
     }
     return filteredData
 }
 
-function onRowSelectToggle (row: Record<string, any>) {
+function onRowSelectToggle(row: Record<string, any>) {
     const options: FlattenOptions = { safe: true }
     const flatRow: Record<string, any> = flatten(row, options)
     if (selectedRowIds.value.includes(flatRow[props.selectableRowsTrackBy])) {
@@ -578,7 +576,7 @@ function onRowSelectToggle (row: Record<string, any>) {
     }
 }
 
-function getPortionOfArray (sourceArray: Array<Record<string, any>>, offset: number, limit: number): Array<Record<string, any>> {
+function getPortionOfArray(sourceArray: Array<Record<string, any>>, offset: number, limit: number): Array<Record<string, any>> {
     const content: Array<Record<string, any>> = []
     for (let i = offset; i < sourceArray.length; i++) {
         const item = sourceArray[i]
@@ -593,7 +591,7 @@ function getPortionOfArray (sourceArray: Array<Record<string, any>>, offset: num
     return content
 }
 
-function getAggregateValue (columnKey: string): any {
+function getAggregateValue(columnKey: string): any {
     const fn = aggregateFunctions.value[columnKey]
     if (typeof fn !== 'function') {
         return undefined
@@ -602,7 +600,7 @@ function getAggregateValue (columnKey: string): any {
     return (filteredData.value as any[]).reduce(fn as any, initialValue)
 }
 
-function onSort (cellDataProp: string): void {
+function onSort(cellDataProp: string): void {
     if (`${sortBy.value}` !== `${cellDataProp}`) {
         sortBy.value = `${cellDataProp}`
         sortDirection.value = 'ASC'
@@ -615,7 +613,7 @@ function onSort (cellDataProp: string): void {
     }
 }
 
-function onRefresh (): void {
+function onRefresh(): void {
     if (props.remoteDataMode) {
         onRemoteDataRefresh()
     } else {
@@ -623,7 +621,7 @@ function onRefresh (): void {
     }
 }
 
-function onFilter (value: Record<string, any>): void {
+function onFilter(value: Record<string, any>): void {
     const cleanedFilter: Record<string, any> = {}
     for (const key in value) {
         if (value[key] !== '' && value[key] !== null && value[key] !== undefined) {
@@ -633,9 +631,9 @@ function onFilter (value: Record<string, any>): void {
     filter.value = { ...cleanedFilter }
 }
 
-function onAction (value: { event: string, row: Record<string, any> }): void {
+function onAction(value: { event: string, row: Record<string, any> }): void {
     $emit('action', value)
-    // @ts-expect-error
+    // @ts-expect-error known limitation of vue uknown emits typing
     $emit(value.event, value.row)
 }
 </script>

@@ -1,4 +1,4 @@
-import {computed, type ComputedRef, inject, type MaybeRefOrGetter, toValue} from 'vue'
+import { computed, type ComputedRef, type MaybeRefOrGetter, toValue } from 'vue'
 
 export const getId = (suffix = '') => {
     const id = Math.random().toString().slice(2, 10)

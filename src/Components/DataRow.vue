@@ -2,7 +2,7 @@
     <tr :class="rowClassnames">
         <td v-if="selectableRows && selectableRowsCheckboxes" class="vue-datatable-vertical-align-middle">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" :id="`${tableUniqueKey}_rowCheckbox-${rowIndex}`" v-model="selectedModel">
+                <input type="checkbox" class="custom-control-input" :id="`${tableUniqueKey}_rowCheckbox-${rowIndex}`" v-model="selectedModel"/>
             </div>
         </td>
         <DataRowButtons
@@ -91,10 +91,10 @@ const selected = computed(() => {
 })
 
 const selectedModel = computed({
-    get () {
+    get() {
         return selected.value
     },
-    set (value) {
+    set() {
         $emit('rowSelectToggle', props.row.row)
     }
 })
@@ -119,11 +119,11 @@ const rowClassnames = computed(() => {
     return classnames
 })
 
-function onAction (data: { event: string, row: Record<string, any>}): void {
+function onAction(data: { event: string, row: Record<string, any> }): void {
     $emit('action', data)
 }
 
-function onCellClick (item: ProcessedCell): void {
+function onCellClick(item: ProcessedCell): void {
     if (item.clickToSelect === true && props.selectableRows && !props.selectableRowsCheckboxes) {
         selectedModel.value = !selectedModel.value
     }

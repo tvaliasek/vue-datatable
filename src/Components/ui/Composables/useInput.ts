@@ -1,7 +1,7 @@
 import { computed, unref } from 'vue'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useInput (props: Record<string, any>, $emit: (event: any, ...args: any) => void) {
+export function useInput(props: Record<string, any>, $emit: (event: any, ...args: any) => void) {
     const isRequired = computed(() => {
         const showAsRequired = unref(props.showAsRequired)
         if (showAsRequired === false || showAsRequired === true) {

@@ -78,7 +78,7 @@ const header = computed(() => {
             data: 'party',
             sortable: true,
             filterable: true,
-            customComponent () {
+            customComponent() {
                 return CustomCell
             }
         },
@@ -96,7 +96,7 @@ const header = computed(() => {
             data: 'enddate',
             sortable: true,
             filterable: true,
-            format (value: string) {
+            format(value: string) {
                 return (new Date(value)).toLocaleDateString()
             }
         },
@@ -105,11 +105,13 @@ const header = computed(() => {
             data: 'congress_numbers',
             sortable: true,
             filterable: true,
-            format (value: string[] | string) {
+            format(value: string[] | string) {
                 return (Array.isArray(value) ? value.join(', ') : `${value}`)
             },
             aggregateText: 'Total: ',
-            aggregate (accumulator: number, currentValue: RecordType, index: number, array: RecordType[]) {
+            aggregate(accumulator: number, currentValue: RecordType, index: number, array: RecordType[]) {
+                void index
+                void array
                 // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                 return accumulator + (Array.isArray(currentValue.congress_numbers) ? currentValue.congress_numbers.length : 0)
             },
@@ -133,7 +135,7 @@ const buttons = computed<ActionButtonDefinition[]>(() => {
             confirmText: 'Are you sure?'
         },
         {
-            customComponent () {
+            customComponent() {
                 return CustomButton
             }
         },
@@ -146,7 +148,8 @@ const buttons = computed<ActionButtonDefinition[]>(() => {
         },
         {
             text: 'linkCallback',
-            hrefCallback (row: { row: RecordType }) {
+            hrefCallback(row: { row: RecordType }) {
+                void row
                 return '/test/foo'
             },
             variant: 'primary'
@@ -157,11 +160,11 @@ const buttons = computed<ActionButtonDefinition[]>(() => {
 onMounted(() => {
     loadDataset()
 })
-function onRefresh (): void {
+function onRefresh(): void {
     console.log('Refreshing...')
 }
 
-function loadDataset (): void {
+function loadDataset(): void {
     loading.value = true
     dataset.value = []
     axios.get(DATASET_URL)
@@ -171,15 +174,17 @@ function loadDataset (): void {
         }).catch((error) => {
             alert(error.message)
         }).finally(() => {
-            void nextTick(() => { loading.value = false })
+            void nextTick(() => {
+                loading.value = false
+            })
         })
 }
 
-function onDetail (rowData: RecordType): void {
+function onDetail(rowData: RecordType): void {
     detail.value = rowData
 }
 
-function onExport (data: RecordType[]): void {
+function onExport(data: RecordType[]): void {
     console.log(data)
 }
 </script>

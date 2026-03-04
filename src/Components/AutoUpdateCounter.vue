@@ -39,7 +39,7 @@ const text = computed(() => {
     return (running.value) ? `${props.i18n.autorefreshAfter} ${counter.value}s` : props.i18n.autorefresh
 })
 
-function onClick (): void {
+function onClick(): void {
     clearInterval(tm.value)
     counter.value = props.autoUpdateLimit
     if (running.value) {
@@ -50,7 +50,7 @@ function onClick (): void {
     }
 }
 
-function decrement (): void {
+function decrement(): void {
     counter.value--
     if (counter.value <= 0) {
         $emit('refresh')

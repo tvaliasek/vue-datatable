@@ -32,7 +32,7 @@ const sortIconName = computed(() => {
     return 'arrows-expand'
 })
 
-function onSort (): void {
+function onSort(): void {
     if (props.sortable) {
         $emit('sort', `${props.dataField}`)
     }

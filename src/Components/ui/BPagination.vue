@@ -133,7 +133,7 @@ const pagesShown = computed(() => {
     return result
 })
 
-function onPageClick (page: number): void {
+function onPageClick(page: number): void {
     $emit('update:modelValue', page)
 }
 

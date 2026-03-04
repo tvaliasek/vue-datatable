@@ -22,13 +22,13 @@ const tm = ref<any>(null)
 const localFilterValue = ref<string>(((props.filter.hasOwnProperty(props.dataField)) ? (props.filter[props.dataField] ?? '') : ''))
 
 const filterValue = computed({
-    get () {
+    get() {
         if (props.filter.hasOwnProperty(props.dataField)) {
             return props.filter[props.dataField] ?? ''
         }
         return ''
     },
-    set (value: string) {
+    set(value: string) {
         const filter = JSON.parse(JSON.stringify(props.filter))
         filter[props.dataField] = `${value}`
         $emit('filter', filter)
@@ -38,11 +38,13 @@ const filterValue = computed({
 watch(localFilterValue, (newValue) => {
     const value = `${newValue}`
     window.clearTimeout(tm.value)
-    window.setTimeout(() => {
+    tm.value = window.setTimeout(() => {
         filterValue.value = value
     }, 500)
 }
 )
 
-onBeforeUnmount(() => { window.clearTimeout(tm.value) })
+onBeforeUnmount(() => {
+    window.clearTimeout(tm.value)
+})
 </script>

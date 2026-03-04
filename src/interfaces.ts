@@ -25,6 +25,19 @@ export interface DisplayConfig {
     sortDirection: null | 'ASC' | 'DESC'
 }
 
+/**
+ * A subset of vue-router's RouteLocationRaw that allows returning a named or
+ * path-based route definition from hrefCallback without requiring vue-router to
+ * be listed as a hard dependency of this library.
+ */
+export interface RouterRouteDefinition {
+    name?: string | symbol
+    path?: string
+    params?: Record<string, string | string[]>
+    query?: Record<string, string | string[] | null | undefined>
+    hash?: string
+}
+
 export interface ActionButtonDefinition<TRowData extends Record<string, any> = Record<string, any>> {
     text?: string
     event?: string
@@ -36,7 +49,13 @@ export interface ActionButtonDefinition<TRowData extends Record<string, any> = R
     customTextComponent?: string | CallableFunction
     customTextComponentProps?: Record<string, any>
     href?: string
-    hrefCallback?: (row: ProcessedRowData<TRowData>) => string | undefined
+    /**
+     * Return a plain string for a direct href navigation, or a
+     * RouterRouteDefinition object to resolve & navigate via Vue Router.
+     * When a RouterRouteDefinition is returned, Vue Router must be installed
+     * in the host application or an error will be thrown at runtime.
+     */
+    hrefCallback?: (row: ProcessedRowData<TRowData>) => string | RouterRouteDefinition | undefined
 }
 
 export interface ProcessedCell {

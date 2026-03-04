@@ -16,15 +16,15 @@ export default (
     }>,
     modelValue: Ref<string | number | null>
 ): {
-        input: Ref<HTMLInputElement | null>
-        computedId: ComputedRef<string>
-        computedAriaInvalid: ComputedRef<'grammar' | 'spelling' | 'true' | 'false' | undefined>
-        onInput: (evt: Readonly<Event>) => void
-        onChange: (evt: Readonly<Event>) => void
-        onBlur: (evt: Readonly<FocusEvent>) => void
-        focus: () => void
-        blur: () => void
-    } => {
+    input: Ref<HTMLInputElement | null>
+    computedId: ComputedRef<string>
+    computedAriaInvalid: ComputedRef<'grammar' | 'spelling' | 'true' | 'false' | undefined>
+    onInput: (evt: Readonly<Event>) => void
+    onChange: (evt: Readonly<Event>) => void
+    onBlur: (evt: Readonly<FocusEvent>) => void
+    focus: () => void
+    blur: () => void
+} => {
     const computedId = useId(() => props.id)
     const input = ref<HTMLInputElement | null>(null)
 

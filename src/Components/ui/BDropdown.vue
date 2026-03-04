@@ -97,20 +97,20 @@ watch(computed(() => props.autoClose), () => {
     void nextTick(() => registerClickHandler())
 })
 
-function onMenuClick (): void {
+function onMenuClick(): void {
     isShown.value = !isShown.value
 }
 
-function registerClickHandler (): void {
+function registerClickHandler(): void {
     window.addEventListener('click', (event) => {
         if (event.target === null || event.target === dropdownToggle.value || dropdownToggle.value?.contains(event.target as Node) === true) {
             return
         }
         const isClickedIgnoredEl = event.target === dropdownMenu.value || dropdownMenu.value?.contains(event.target as Node) === true
         if (
-            props.autoClose === true ||
-            (props.autoClose === DROPDOWN_AUTO_CLOSE.INSIDE && isClickedIgnoredEl) ||
-            (props.autoClose === DROPDOWN_AUTO_CLOSE.OUTSIDE && !isClickedIgnoredEl)
+            props.autoClose === true
+            || (props.autoClose === DROPDOWN_AUTO_CLOSE.INSIDE && isClickedIgnoredEl)
+            || (props.autoClose === DROPDOWN_AUTO_CLOSE.OUTSIDE && !isClickedIgnoredEl)
         ) {
             isShown.value = false
         }
