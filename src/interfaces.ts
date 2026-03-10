@@ -1,8 +1,11 @@
 import type { Component } from 'vue'
 
-export interface ColumnDefinition<T extends Record<string, any> = Record<string, any>> {
+export interface ColumnDefinition<
+    T extends Record<string, any> = Record<string, any>,
+    TDataKey extends keyof T = keyof T
+> {
     text: string
-    data: keyof T
+    data: TDataKey
     sortable?: boolean
     filterable?: boolean
     format?: (value: any, row: Record<string, any>) => any
