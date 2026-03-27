@@ -1,11 +1,9 @@
 import DataTableComponent from './DataTable.vue'
-import type { App, Plugin } from 'vue'
+import type { App, ObjectPlugin } from 'vue'
 
-export const DataTablePlugin = (): Plugin => {
-    return {
-        install(app: App) {
-            app.component('DataTable', DataTableComponent)
-        }
+export const DataTablePlugin: ObjectPlugin = {
+    install(app: App, _options?: unknown) {
+        app.component('DataTable', DataTableComponent)
     }
 }
 

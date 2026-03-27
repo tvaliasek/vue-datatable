@@ -1,6 +1,6 @@
 {
     "name": "@tvaliasek/vue-datatable",
-    "version": "2.4.5",
+    "version": "2.4.10",
     "private": false,
     "packageManager": "pnpm@10.8.0",
     "type": "module",
@@ -19,13 +19,13 @@
         "!dist/favicon.ico"
     ],
     "types": "./dist/index.d.ts",
-    "main": "dist/data-table.umd.js",
+    "main": "dist/data-table.umd.cjs",
     "module": "dist/data-table.mjs",
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
             "import": "./dist/data-table.mjs",
-            "require": "./dist/data-table.umd.js"
+            "require": "./dist/data-table.umd.cjs"
         },
         "./dist/data-table.css": {
             "import": "./dist/data-table.css",

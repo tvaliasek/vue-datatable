@@ -25,7 +25,15 @@ export default defineConfig({
         lib: {
             entry: resolve(currentDirectory, 'src/index.ts'),
             name: 'DataTable',
-            fileName: 'data-table',
+            fileName: (format) => {
+                if (format === 'es') {
+                    return 'data-table.mjs'
+                }
+                if (format === 'umd') {
+                    return 'data-table.umd.cjs'
+                }
+                return 'data-table.cjs'
+            },
             formats: ['es', 'umd', 'cjs']
         },
         rollupOptions: {
