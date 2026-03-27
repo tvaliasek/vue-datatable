@@ -4,6 +4,8 @@ import pluginVue from 'eslint-plugin-vue'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import stylistic from '@stylistic/eslint-plugin'
 
+const currentDirectory = process.cwd()
+
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
 // configureVueProject({ scriptLangs: ['ts', 'tsx'] })
@@ -25,7 +27,7 @@ export default defineConfigWithVueTs(
         ignores: ['**/public/**'],
         languageOptions: {
             parserOptions: {
-                tsconfigRootDir: __dirname
+                tsconfigRootDir: currentDirectory
             }
         }
     },

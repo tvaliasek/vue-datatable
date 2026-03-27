@@ -1,8 +1,9 @@
 {
     "name": "@tvaliasek/vue-datatable",
-    "version": "2.4.4",
+    "version": "2.4.5",
     "private": false,
     "packageManager": "pnpm@10.8.0",
+    "type": "module",
     "engines": {
         "node": "^20.19.0 || >=22.12.0"
     },

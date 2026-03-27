@@ -4,24 +4,26 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { resolve } from 'node:path'
 import dts from 'vite-plugin-dts'
 
+const currentDirectory = process.cwd()
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue({}),
         dts({
-            tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json')
+            tsconfigPath: resolve(currentDirectory, 'tsconfig.declarations.json')
         }),
         vueDevTools()
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'src')
+            '@': resolve(currentDirectory, 'src')
         }
     },
     build: {
         sourcemap: true,
         lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
+            entry: resolve(currentDirectory, 'src/index.ts'),
             name: 'DataTable',
             fileName: 'data-table',
             formats: ['es', 'umd', 'cjs']
