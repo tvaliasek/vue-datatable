@@ -274,6 +274,7 @@ const currentPageLimit = ref<number>(initialPageLimit)
 const uniqueKey = ref<string>(props.tableUniqueKey ?? `vueDataTable_${generateString(20)}`)
 
 watch(filter, () => {
+    currentPage.value = 1
     onSaveState()
     onRemoteDataRefresh()
 })
