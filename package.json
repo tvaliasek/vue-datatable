@@ -1,6 +1,6 @@
 {
     "name": "@tvaliasek/vue-datatable",
-    "version": "2.4.10",
+    "version": "2.4.11",
     "private": false,
     "packageManager": "pnpm@10.8.0",
     "type": "module",
