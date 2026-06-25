@@ -364,6 +364,16 @@ const filterFunctions = computed(() => {
     return tmp
 })
 
+const caseSensitiveFilters = computed(() => {
+    const tmp: Record<string, boolean> = {}
+    for (const cell of props.header) {
+        if (cell.filterCaseSensitive === true) {
+            tmp[cell.data] = true
+        }
+    }
+    return tmp
+})
+
 const formatFunctions = computed(() => {
     const tmp: Record<string, (...args: any[]) => any> = {}
     for (const cell of props.header) {
@@ -427,10 +437,15 @@ const filteredData = computed<TRowData[]>(() => {
             if (filter.value.hasOwnProperty(index) && filter.value[index] !== '' && filter.value[index]) {
                 if (filterFunctions.value.hasOwnProperty(index) && typeof filterFunctions.value[index] === 'function') {
                     isVisible = isVisible && filterFunctions.value[index](`${row[index]}`, filter.value[index], row)
-                } else if (formatFunctions.value[index] && typeof formatFunctions.value[index] === 'function') {
-                    isVisible = isVisible && `${formatFunctions.value[index](row[index], row)}`.includes(filter.value[index])
                 } else {
-                    isVisible = isVisible && `${row[index]}`.toLocaleLowerCase().includes(`${filter.value[index]}`.toLocaleLowerCase())
+                    const caseSensitive = caseSensitiveFilters.value[index] === true
+                    const cellValue = (formatFunctions.value[index] && typeof formatFunctions.value[index] === 'function')
+                        ? `${formatFunctions.value[index](row[index], row)}`
+                        : `${row[index]}`
+                    const needle = `${filter.value[index]}`
+                    isVisible = isVisible && (caseSensitive
+                        ? cellValue.includes(needle)
+                        : cellValue.toLocaleLowerCase().includes(needle.toLocaleLowerCase()))
                 }
                 if (!isVisible) {
                     return false

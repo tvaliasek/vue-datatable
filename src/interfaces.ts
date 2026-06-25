@@ -26,6 +26,7 @@ export interface ColumnDefinition<
     data: DotPaths<T>
     sortable?: boolean
     filterable?: boolean
+    filterCaseSensitive?: boolean
     format?: (value: any, row: ProcessedRowData<T>) => any
     sortFn?: (a: any, b: any) => number
     filterFn?: (cellValue: any, filterValue: string, rowData: ProcessedRowData<T>) => boolean
