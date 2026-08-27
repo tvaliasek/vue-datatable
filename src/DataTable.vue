@@ -35,7 +35,7 @@
                     @select-all="onSelectAll"
                     @select-none="onSelectNone"
                 />
-                <tbody v-if="loading || data.length === 0">
+                <tbody v-if="loading || processedData.length === 0">
                     <slot name="firstRow"></slot>
                     <tr>
                         <td
@@ -111,7 +111,7 @@
                         v-if="paging"
                         v-model="currentPage"
                         size="sm"
-                        :total="(props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.length"
+                        :total="totalRows"
                         :per-page="currentPageLimit"
                         :first-number="paginationFirstNumber"
                         :last-number="paginationLastNumber"
@@ -456,6 +456,17 @@ const filteredData = computed<TRowData[]>(() => {
     })
 })
 
+const totalRows = computed<number>(() => {
+    return (props.remoteDataMode) ? props.remoteDataTotalRows : filteredData.value.length
+})
+
+const totalPages = computed<number>(() => {
+    if (currentPageLimit.value <= 0) {
+        return 0
+    }
+    return Math.ceil(totalRows.value / currentPageLimit.value)
+})
+
 const sortedData = computed<TRowData[]>(() => {
     if (!props.remoteDataMode && sortBy.value !== null) {
         return sortData(filteredData.value)
@@ -475,6 +486,16 @@ const processedData = computed<ProcessedRowData<TRowData>[]>(() => {
     return processData(pagedData.value)
 })
 
+watch(
+    [totalPages, currentPage, () => props.paging, () => props.loading],
+    ([availablePages, page, isPagingEnabled, isLoading]) => {
+        if (!isPagingEnabled || isLoading) {
+            return
+        }
+        currentPage.value = clampPageToAvailablePages(page, availablePages)
+    }
+)
+
 onBeforeMount(() => {
     if (props.stateSaving && props.stateSavingUniqueKey) {
         const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
@@ -491,6 +512,11 @@ onBeforeMount(() => {
 
 function onSetCurrentPageLimit(value: number): void {
     currentPageLimit.value = value
+}
+
+function clampPageToAvailablePages(page: number, availablePages: number): number {
+    const lastPage = Math.max(1, availablePages)
+    return Math.min(Math.max(1, page), lastPage)
 }
 
 function onSelectAll(): void {
