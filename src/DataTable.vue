@@ -487,9 +487,13 @@ const processedData = computed<ProcessedRowData<TRowData>[]>(() => {
 })
 
 watch(
-    [totalPages, currentPage, () => props.paging, () => props.loading],
-    ([availablePages, page, isPagingEnabled, isLoading]) => {
+    [() => props.loading, totalPages, currentPage, () => props.paging],
+    ([isLoading, availablePages, page, isPagingEnabled], [wasLoading]) => {
         if (!isPagingEnabled || isLoading) {
+            return
+        }
+        const hasUnknownRowCount = availablePages === 0 && !wasLoading
+        if (hasUnknownRowCount) {
             return
         }
         currentPage.value = clampPageToAvailablePages(page, availablePages)
