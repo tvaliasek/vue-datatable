@@ -23,6 +23,26 @@
             </div>
         </div>
         <p>Selected rows: {{ selected.length }}</p>
+        <div class="mb-3 d-flex gap-2">
+            <button
+                class="btn btn-warning btn-sm"
+                @click.prevent="dataset = dataset.slice(0, 3)"
+            >
+                shrink to 3 rows
+            </button>
+            <button
+                class="btn btn-danger btn-sm"
+                @click.prevent="dataset = []"
+            >
+                shrink to 0 rows
+            </button>
+            <button
+                class="btn btn-secondary btn-sm"
+                @click.prevent="loadDataset()"
+            >
+                reload (sets loading + empties data)
+            </button>
+        </div>
         <DataTable
             v-model="selected"
             :auto-update="true"
