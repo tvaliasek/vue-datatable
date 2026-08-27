@@ -35,7 +35,7 @@
                     @select-all="onSelectAll"
                     @select-none="onSelectNone"
                 />
-                <tbody v-if="loading || data.length === 0">
+                <tbody v-if="loading || processedData.length === 0">
                     <slot name="firstRow"></slot>
                     <tr>
                         <td
