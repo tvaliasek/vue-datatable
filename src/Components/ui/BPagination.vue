@@ -5,6 +5,7 @@
     >
         <li v-if="firstNumber" class="page-item">
             <button
+                type="button"
                 class="page-link"
                 :disabled="props.modelValue <= 1"
                 :class="{ 'disabled': props.modelValue <= 1 }"
@@ -15,6 +16,7 @@
         </li>
         <li class="page-item">
             <button
+                type="button"
                 class="page-link"
                 @click.prevent="onPageClick(props.modelValue - 1)"
                 :disabled="props.modelValue <= 1"
@@ -39,6 +41,7 @@
             </span>
             <button
                 v-else
+                type="button"
                 class="page-link"
                 @click.prevent="onPageClick(page.id)"
             >
@@ -47,6 +50,7 @@
         </li>
         <li class="page-item">
             <button
+                type="button"
                 class="page-link"
                 @click.prevent="onPageClick(props.modelValue + 1)"
                 :disabled="props.modelValue >= pages.length"
@@ -59,6 +63,7 @@
         </li>
         <li v-if="lastNumber" class="page-item">
             <button
+                type="button"
                 class="page-link"
                 :disabled="props.modelValue >= pages.length"
                 :class="{ 'disabled': props.modelValue >= pages.length }"

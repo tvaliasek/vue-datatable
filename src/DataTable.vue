@@ -56,6 +56,20 @@
                     </tr>
                     <slot name="lastRow"></slot>
                 </tbody>
+                <tbody v-if="!loading && data.length > 0 && processedData.length === 0 && isFiltered">
+                    <slot name="firstRow"></slot>
+                    <tr>
+                        <td
+                            class="text-center"
+                            :colspan="(header.length + ((actions) ? 1 : 0)) + ((selectableRows && selectableRowsCheckboxes) ? 1 : 0)"
+                        >
+                            <p class="mb-0">
+                                {{ i18nStrings.emptyFilteredData }}
+                            </p>
+                        </td>
+                    </tr>
+                    <slot name="lastRow"></slot>
+                </tbody>
                 <tbody v-else>
                     <slot name="firstRow"></slot>
                     <DataRow
@@ -149,6 +163,7 @@
                     :on-export="onExport"
                 >
                     <button
+                        type="button"
                         class="btn btn-sm"
                         :class="`btn-${exportButtonVariant}`"
                         @click.prevent="onExport"
@@ -274,7 +289,6 @@ const currentPageLimit = ref<number>(initialPageLimit)
 const uniqueKey = ref<string>(props.tableUniqueKey ?? `vueDataTable_${generateString(20)}`)
 
 watch(filter, () => {
-    currentPage.value = 1
     onSaveState()
     onRemoteDataRefresh()
 })
@@ -292,11 +306,27 @@ watch(sortDirection, () => {
 watch(currentPage, () => {
     onSaveState()
     onRemoteDataRefresh()
+    onPaginationChange()
 })
 
 watch(currentPageLimit, () => {
     onSaveState()
     onRemoteDataRefresh()
+    onPaginationChange()
+})
+
+defineExpose<{
+    refresh: () => void
+    selectAll: () => void
+    selectNone: () => void
+    setCurrentPage: (value: number) => void
+    export: () => void
+}>({
+    refresh: onRefresh,
+    selectAll: onSelectAll,
+    selectNone: onSelectNone,
+    setCurrentPage,
+    export: onExport
 })
 
 const tableClassnames = computed(() => {
@@ -475,6 +505,10 @@ const processedData = computed<ProcessedRowData<TRowData>[]>(() => {
     return processData(pagedData.value)
 })
 
+const isFiltered = computed(() => {
+    return (filter.value !== undefined && filter.value !== null && Object.keys(filter.value).length > 0)
+})
+
 onBeforeMount(() => {
     if (props.stateSaving && props.stateSavingUniqueKey) {
         const state = JSON.parse(sessionStorage.getItem('_vueDataTableStates') || '{}')
@@ -499,6 +533,25 @@ function onSelectAll(): void {
 
 function onSelectNone(): void {
     selectedRows.value = []
+}
+
+function setCurrentPage(value: number): void {
+    if (value < 1) {
+        value = 1
+    }
+    if (value > Math.ceil(filteredData.value.length / currentPageLimit.value)) {
+        value = Math.ceil(filteredData.value.length / currentPageLimit.value)
+    }
+    currentPage.value = value
+}
+
+function onPaginationChange(): void {
+    if (props.paging && props.remoteDataMode) {
+        const currentMaxPage = Math.ceil(props.remoteDataTotalRows / currentPageLimit.value)
+        if (currentPage.value > 1 && currentPage.value > currentMaxPage) {
+            currentPage.value = 1
+        }
+    }
 }
 
 function onSaveState(): void {
@@ -657,6 +710,7 @@ function onFilter(value: Record<string, any>): void {
             cleanedFilter[key] = value[key]
         }
     }
+    currentPage.value = 1
     filter.value = { ...cleanedFilter }
 }
 

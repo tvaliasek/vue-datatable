@@ -1,6 +1,7 @@
 export default {
     loading: 'Načítanie ..',
     noData: 'Žiadne dáta',
+    emptyFilteredData: 'Zadaným podmienkam neodpovedajú žiadne dáta',
     autorefreshAfter: 'Obnovenie za',
     autorefresh: 'Automaticky obnoviť',
     search: 'Hľadať',

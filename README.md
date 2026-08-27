@@ -89,6 +89,7 @@ Columns are defined as Array of objects
 | data | String | yes | undefined | Name of property in row data object, for nested objects it should be in dot notation ex: ```'person.name'``` |
 | sortable | Boolean | no | false | Toggles sorting on column, data is by default sorted naturally |
 | filterable | Boolean | no | false | Toggles filtering on column |
+| filterCaseSensitive | Boolean | no | false | Set to true to make the built-in filter for this column case sensitive |
 | format | Function | no | undefined | Custom cell data format function. ```(value, row) => value ``` |
 | sortFn | Function | no | undefined | Custom sort function ``` sort(a, b) ``` |
 | filterFn | Function | no | undefined | Custom filter function ``` filter(cellValue, filterValue, rowData) ``` |
@@ -127,6 +128,32 @@ Actions are defined as Array of objects, each action generates button and emits 
 | as defined in action | { ...row } | Emitted on click to any action button |
 | export | [{ cellDataProperty: cellContent }] | Emitted on click to export button |
 | remote-data-refresh | `{ filter: {key: filterQuery}[], sortBy: string, sortDirection: string, currentPage: number, currentPageLimit: number }` | Emitted on any display settings change during remote data mode, automatically debounced |
+
+### Exposed methods
+
+The `DataTable` component exposes the following methods via a template ref, so you can control it programmatically from the parent component.
+
+| method | signature | usage |
+| ------ | --------- | ----- |
+| refresh | `() => void` | Triggers a refresh. In remote data mode it emits `remote-data-refresh`, otherwise it emits the `refresh` event. |
+| selectAll | `() => void` | Selects all rows matching the current filtering/sorting (requires `selectableRows` and `v-model`). |
+| selectNone | `() => void` | Clears the current row selection. |
+| setCurrentPage | `(value: number) => void` | Navigates to the given page number, clamped to the valid page range. |
+| export | `() => void` | Triggers export, emitting the `export` event with the current dataset. |
+
+``` vue
+<template>
+    <DataTable ref="tableRef" :header="columns" :data="rows" />
+    <button @click="tableRef?.refresh()">Refresh</button>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { DataTable } from '@tvaliasek/vue-datatable'
+
+const tableRef = ref<InstanceType<typeof DataTable>>()
+</script>
+```
 
 ## Run demo
 ``` sh

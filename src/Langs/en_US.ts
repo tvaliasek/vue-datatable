@@ -1,6 +1,7 @@
 export default {
     loading: 'Loading ..',
     noData: 'No data',
+    emptyFilteredData: 'No data match the given filter',
     autorefreshAfter: 'Auto refresh in',
     autorefresh: 'Auto refresh',
     search: 'Search',
