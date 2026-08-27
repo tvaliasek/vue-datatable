@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 const props = withDefaults(defineProps<{
     modelValue?: number
@@ -115,6 +115,12 @@ const pages = computed(() => {
     })
 
     return pages
+})
+
+watch(pages, () => {
+    if (props.modelValue > pages.value.length) {
+        $emit('update:modelValue', 1)
+    }
 })
 
 const pagesShown = computed(() => {
